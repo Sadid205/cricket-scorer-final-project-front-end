@@ -9,6 +9,7 @@ const Header = ()=>{
     const navigate = useNavigate()
     const [open,setOpen] = useState(false)
     const Token = localStorage.getItem("Token")
+    const [loading,setLoading] = useState(false)
     const Links = [
         { name: "Home", link: "/" },
         // { name: "Supports", link: "/supports" },
@@ -19,7 +20,8 @@ const Header = ()=>{
       };
       const logoutHandler = async()=>{
         try{
-          const request_logout = await fetch('http://127.0.0.1:8000/author/logout/',{
+          setLoading(true)
+          const request_logout = await fetch('https://cricket-scorer-final-project-back-end.onrender.com/author/logout/',{
             method:"GET",
             headers:{
               Authorization:`Token ${Token}`,
@@ -28,6 +30,7 @@ const Header = ()=>{
           });
           const response_logout = await request_logout.json()
           if(response_logout.Success){
+            setLoading(false)
             localStorage.removeItem("Token")
             localStorage.removeItem("user_id")
             localStorage.removeItem("author_id")
@@ -37,7 +40,7 @@ const Header = ()=>{
               toast(`${response_logout.Success}`)
           }
           notify()
-          navigate("/login")
+          navigate("/")
           }
         }catch(e){
           console.log(e)
@@ -81,7 +84,11 @@ const Header = ()=>{
                   <div className="relative inline-flex group">
                     <div className="absolute transition-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] rounded-xl blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
                       <button onClick={logoutHandler} className="relative inline-flex items-center justify-center w-20 h-10 px-3 py-2 text-sm font-bold text-white transition-all duration-200 bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900">
-                        Logout
+                        {loading?(
+                          <div class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full dark:text-blue-500" role="status" aria-label="loading">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                        ):("Logout")}
                       </button>
                   </div>
                   </div>

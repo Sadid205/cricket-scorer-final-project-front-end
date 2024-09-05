@@ -8,11 +8,13 @@ const NewMatch = ()=>{
     const [elected,setElected] = useState("")
     const navigate = useNavigate();
     const [over,setOver] = useState(5)
+    const [loading,setLoading] = useState(false)
     const onSubmit = (e)=>{
         const Token = localStorage.getItem("Token")
         e.preventDefault();
         const start_match = async()=>{
-            const newMatchResponse = await fetch('http://127.0.0.1:8000/match/start/',{method:'POST',headers:{
+            setLoading(true)
+            const newMatchResponse = await fetch('https://cricket-scorer-final-project-back-end.onrender.com/match/start/',{method:'POST',headers:{
                 Authorization:`Token ${Token}`,
                 "Content-Type":"application/json"
             },body:JSON.stringify({
@@ -25,15 +27,17 @@ const NewMatch = ()=>{
                 })
             })
         const new_match = await newMatchResponse.json()
-        // console.log(new_match)
-        localStorage.setItem("match_id",new_match.match_id)
-        navigate('/select_opening_player')
+        if(new_match){
+            setLoading(false)
+            localStorage.setItem("match_id",new_match.match_id)
+            navigate('/select_opening_player')
+        }
         }
         
         start_match()
     }
     return (
-        <div style={{height:'100vh'}} className="bg-slate-400 flex justify-center items-center">
+        <div style={{height:'100vh'}} className="bg-gray-700 flex justify-center items-center">
             <div>
             <div className="w-72 p-4">
                 <div>
@@ -92,7 +96,10 @@ const NewMatch = ()=>{
                     <Link className="font-semi-bold">Advanced Settings</Link>
                 </div>
                 <div>
-                    <Link onClick={(e)=>onSubmit(e)} className="bg-green-700 p-2 rounded-md text-white">Start Match</Link>
+                    <Link onClick={(e)=>onSubmit(e)} className="bg-green-700 py-2 flex items-center w-28 justify-center  rounded-md text-white">{loading?(
+                        <div class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full dark:text-blue-500" role="status" aria-label="loading">
+                        </div>):("Start Match")}
+                        </Link>
                 </div>
             </div>
             </div>

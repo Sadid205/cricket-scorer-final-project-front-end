@@ -7,9 +7,11 @@ const Login = ()=>{
     const [username,setUsername] = useState("")
     const [password,setPassword] = useState("")
     const [responseLogin,setResponseLogin] = useState()
+    const [loading,setLoading] = useState(false)
 const handleSubmit= async(e)=>{
     e.preventDefault()
-    const request_login = await fetch('http://127.0.0.1:8000/author/login/',{method:'POST',headers:{
+    setLoading(true)
+    const request_login = await fetch('https://cricket-scorer-final-project-back-end.onrender.com/author/login/',{method:'POST',headers:{
         'Content-Type':'application/json'
     },body:JSON.stringify({
         "username":username,
@@ -18,6 +20,9 @@ const handleSubmit= async(e)=>{
     })
     const response_login = await request_login.json()
     setResponseLogin(response_login)
+    if(response_login){
+      setLoading(false)
+    }
     if(response_login && response_login.Token && response_login.author_id &&  response_login.user_id )
     {
         localStorage.setItem("Token",`${response_login.Token}`)
@@ -89,7 +94,9 @@ return (
           </div>
           <div className="mt-4 flex items-center justify-end gap-x-2">
             <a className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:ring hover:ring-white h-10 px-4 py-2 duration-200" href="/register">Register</a>
-            <button className="font-semibold hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2" type="submit">Log in</button>
+            <button className="font-semibold hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 w-20 py-2" type="submit">{loading?(<div class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full dark:text-blue-500" role="status" aria-label="loading">
+              <span class="sr-only">Loading...</span>
+            </div>):("Log in")}</button>
           </div>
         </form>
       </div>

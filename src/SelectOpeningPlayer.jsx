@@ -6,12 +6,14 @@ const SelectOpeningPlayer = ()=>{
     const [nonStriker,setNonStriker] = useState("Player Name")
     const [bowler,setBowler] = useState("Player Name")
     const match_id = localStorage.getItem("match_id")
+    const [loading,setLoading] = useState(false)
     const onSubmit = (e)=>{
         const Token = localStorage.getItem("Token")
         e.preventDefault()
         // console.log(striker,nonStriker,bowler,match_id)
         const get_response = async()=>{
-            const select_player = await fetch('http://127.0.0.1:8000/match/select_opening_player/',{method:'POST',headers:{
+            setLoading(true)
+            const select_player = await fetch('https://cricket-scorer-final-project-back-end.onrender.com/match/select_opening_player/',{method:'POST',headers:{
                 Authorization:`Token ${Token}`,
                 "Content-Type":"application/json"
             },body:JSON.stringify({
@@ -24,6 +26,7 @@ const SelectOpeningPlayer = ()=>{
             const select_player_response = await select_player.json()
             // console.log(select_player_response)
             if (select_player_response){
+                setLoading(false)
                 localStorage.setItem("current_over","0")
             }
             navigate('/count_runs')
@@ -58,7 +61,11 @@ const SelectOpeningPlayer = ()=>{
                 </div>   
             </div>
             <div className="flex justify-center">
-                <Link onClick={onSubmit} className="w-64 p-2 rounded-xl text-center text-white bg-green-600">Start Match</Link>
+                <Link onClick={onSubmit} className="w-64 p-2 flex items-center justify-center rounded-xl text-center text-white bg-green-600">{loading?(
+                    <div class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full dark:text-blue-500" role="status" aria-label="loading">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                ):("Start Match")}</Link>
             </div>
         </div>
     </div>
