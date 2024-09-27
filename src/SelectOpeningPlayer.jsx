@@ -13,7 +13,7 @@ const SelectOpeningPlayer = ()=>{
         // console.log(striker,nonStriker,bowler,match_id)
         const get_response = async()=>{
             setLoading(true)
-            const select_player = await fetch('http://127.0.0.1:8000/match/select_opening_player/',{method:'POST',headers:{
+            const select_player = await fetch('https://cricket-scorer-final-project-back-end.onrender.com/match/select_opening_player/',{method:'POST',headers:{
                 Authorization:`Token ${Token}`,
                 "Content-Type":"application/json"
             },body:JSON.stringify({
