@@ -14,7 +14,7 @@ const NewMatch = ()=>{
         e.preventDefault();
         const start_match = async()=>{
             setLoading(true)
-            const newMatchResponse = await fetch('https://cricket-scorer-final-project-back-end.onrender.com/match/start/',{method:'POST',headers:{
+            const newMatchResponse = await fetch('http://127.0.0.1:8000/match/start/',{method:'POST',headers:{
                 Authorization:`Token ${Token}`,
                 "Content-Type":"application/json"
             },body:JSON.stringify({

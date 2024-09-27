@@ -26,7 +26,7 @@ const CountRuns = ()=>{
     const [howWicketFall,setHowWicketFall] = useState("Bowled")
     const [whoHelped,setWhoHelped] = useState("Fielder")
     const [newBatsman,setNewBatsman] = useState("New Batsman")
-    const [isWicketFall,setIsWicketFall] = useState(false)
+    const [pendingRun,setPendintRun] = useState(null)
     const [showSecondInningsModal,setShowSecondInningsModal] = useState(false)
     const [secondInningsStriker,setSecondInningsStriker] = useState("")
     const [secondInningsNonStriker,setSecondInningsNonStriker] = useState("")
@@ -37,12 +37,12 @@ const CountRuns = ()=>{
     useEffect(()=>{
         const current_over = localStorage.getItem('current_over')
         if(score?.innings==="1st"){
-            if(oversData?.fi_all_overs>parseInt(current_over)){
+            if((oversData?.fi_all_overs<score.total_over)&&(oversData?.fi_all_overs>parseInt(current_over))){
                 setShowModal(true)
             }
         }
         if(score?.innings==="2nd"){
-            if(oversData?.si_all_overs>parseInt(current_over)){
+            if((oversData?.si_all_overs<score.total_over)&&(oversData?.si_all_overs>parseInt(current_over))){
                 setShowModal(true)
             }
         }
@@ -63,33 +63,33 @@ const CountRuns = ()=>{
         const getMatchData = async()=>{
             try{
                 setLoading(true)
-                const match_data = await fetch(`https://cricket-scorer-final-project-back-end.onrender.com/match/${match_id}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                const match_data = await fetch(`http://127.0.0.1:8000/match/${match_id}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                     "Content-Type":"application/json"}})
                 const match_data_response = await match_data.json()
             if (match_data_response.striker && match_data_response.non_striker){
                 setScore(match_data_response)
-                const striker_data = await fetch(`https://cricket-scorer-final-project-back-end.onrender.com/batsman/${match_data_response.striker}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                const striker_data = await fetch(`http://127.0.0.1:8000/batsman/${match_data_response.striker}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                     "Content-Type":"application/json"}})
                 const response_striker_data = await striker_data.json()
                 setStrikerData(response_striker_data)
-                const non_striker_data = await fetch(`https://cricket-scorer-final-project-back-end.onrender.com/batsman/${match_data_response.non_striker}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                const non_striker_data = await fetch(`http://127.0.0.1:8000/batsman/${match_data_response.non_striker}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                     "Content-Type":"application/json"}})
                 const response_non_striker_data = await non_striker_data.json()
                 setNonStrikerData(response_non_striker_data)
                 if(response_striker_data.team){
-                    const batting_team_data = await fetch(`https://cricket-scorer-final-project-back-end.onrender.com/teams/${response_striker_data.team}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                    const batting_team_data = await fetch(`http://127.0.0.1:8000/teams/${response_striker_data.team}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                         "Content-Type":"application/json"}})
                     const response_batting_team_data = await batting_team_data.json()
                     setBattingTeamData(response_batting_team_data)
                 }
                 if(response_striker_data.player){
-                    const striker_player_data = await fetch(`https://cricket-scorer-final-project-back-end.onrender.com/player/${response_striker_data.player}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                    const striker_player_data = await fetch(`http://127.0.0.1:8000/player/${response_striker_data.player}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                         "Content-Type":"application/json"}})
                     const response_striker_player = await striker_player_data.json()
                     setStrikerPlayer(response_striker_player)
                 }
                 if(response_non_striker_data.player){
-                    const non_striker_player_data = await fetch(`https://cricket-scorer-final-project-back-end.onrender.com/player/${response_non_striker_data.player}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                    const non_striker_player_data = await fetch(`http://127.0.0.1:8000/player/${response_non_striker_data.player}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                         "Content-Type":"application/json"}})
                     const response_non_striker_player = await non_striker_player_data.json()
                     setNonStrikerPlayer(response_non_striker_player)
@@ -97,7 +97,7 @@ const CountRuns = ()=>{
             }
                 if(match_data_response){
                     setLoading(false)
-                const overs_data =  await fetch(`https://cricket-scorer-final-project-back-end.onrender.com/match/get_overs_list/${match_id}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                const overs_data =  await fetch(`http://127.0.0.1:8000/match/get_overs_list/${match_id}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                     "Content-Type":"application/json"}})
                 const overs_data_response = await overs_data.json()
                 setOversData(overs_data_response)
@@ -131,7 +131,7 @@ const CountRuns = ()=>{
             //     "who_helped":whoHelped,
             //     "new_batsman":newBatsman
             // })
-            const updateScoreResponse = await fetch('https://cricket-scorer-final-project-back-end.onrender.com/match/update_score/',{method:'PUT',headers:{
+            const updateScoreResponse = await fetch('http://127.0.0.1:8000/match/update_score/',{method:'PUT',headers:{
                 Authorization:`Token ${Token}`,
                 "Content-Type":"application/json"
             },body:JSON.stringify({
@@ -148,21 +148,21 @@ const CountRuns = ()=>{
                 })
             })
             const scoreResponse = await updateScoreResponse.json()
-            console.log(scoreResponse)
+            // console.log(scoreResponse)
         }
         setScore()
-    },[run,isWicketFall])
-    useEffect(()=>{
-        if(wicketChecked==true){
-            setShowWicketModal(true)
-        }
-    })
+    },[run])
+    // useEffect(()=>{
+    //     if(wicketChecked==true){
+    //         setShowWicketModal(true)
+    //     }
+    // })
     const addNewBowler = async(e)=>{
         e.preventDefault()
        if(bowlerName==""){
         console.log("Please insert a bowler name.")
        }else{
-        const addNewBowlerRequest = await fetch('https://cricket-scorer-final-project-back-end.onrender.com/match/add_new_over/',{method:'PUT',headers:{
+        const addNewBowlerRequest = await fetch('http://127.0.0.1:8000/match/add_new_over/',{method:'PUT',headers:{
             Authorization:`Token ${Token}`,
             "Content-Type":"application/json"
         },body:JSON.stringify({
@@ -178,9 +178,22 @@ const CountRuns = ()=>{
         console.log(addNewBowlerResponse)
        }
     }
+    const doneSetRun=(e)=>{
+        e.preventDefault()
+        if(pendingRun!=null){
+            setRun(pendingRun)
+            setShowWicketModal(false)
+        }
+    }
     const updateScore =(e,current_run)=>{
         e.preventDefault()
-        setRun(current_run)
+        if(wicketChecked==true){
+            setShowWicketModal(true)
+            setPendintRun(current_run)
+        }
+        else{
+            setRun(current_run)
+        }
     }
 
     const handleChecked = (e)=>{
@@ -237,7 +250,7 @@ const CountRuns = ()=>{
     }
     const startSecondInnings= async(e)=>{
         e.preventDefault()
-        const request_start_second_innings = await fetch('https://cricket-scorer-final-project-back-end.onrender.com/match/start_second_innings/',{method:'PUT',headers:{
+        const request_start_second_innings = await fetch('http://127.0.0.1:8000/match/start_second_innings/',{method:'PUT',headers:{
             Authorization:`Token ${Token}`,
             "Content-Type":"application/json"
         },body:JSON.stringify({
@@ -254,6 +267,7 @@ const CountRuns = ()=>{
         }
         console.log(response_start_second_innings)
     }
+    // {score?.innings=="1st"?(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler?(console.log(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler)):(console.log("Bowler"))):(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler?(console.log(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler)):(console.log("Bowler")))}
     return (
     <div style={{height:'100vh'}} className="bg-gray-200">
        <div className="w-11/12 md:h-48  shadow-2xl rounded-2xl md:flex bg-green-500 justify-around p-4 m-auto bg-white">
@@ -370,22 +384,26 @@ const CountRuns = ()=>{
                 <tbody>
                     <tr className="bg-white bg-white dark:border-gray-700">
                         <th scope="row" className="px-6 py-4 font-medium">
-                            {score?.innings=="1st"?(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler?(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler):("Bowler")):(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler?(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler):("Bowler"))}
+                            {score?.innings=="1st"?(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler?(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler.name):("Bowler")):(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler?(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler.name):("Bowler"))}
                         </th>
                         <td className="px-6 py-4">
-                            0
+                            <span>
+                            {score?.innings=="1st"?(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler?(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler.over):(0)):(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler?(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler.over):(0))}
+                            </span>.<span>
+                            {score?.innings=="1st"?(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler?(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler.nth_ball):(0)):(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler?(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler.nth_ball):(0))}
+                            </span>
                         </td>
                         <td className="px-6 py-4">
-                            0
+                        {score?.innings=="1st"?(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler?(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler.madien_over):(0)):(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler?(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler.madien_over):(0))}
                         </td>
                         <td className="px-6 py-4">
-                            0
+                        {score?.innings=="1st"?(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler?(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler.run):(0)):(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler?(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler.run):(0))}
                         </td>
                         <td className="px-6 py-4">
-                            0
+                        {score?.innings=="1st"?(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler?(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler.wicket):(0)):(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler?(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler.wicket):(0))}
                         </td>
                         <td className="px-6 py-4">
-                            0.00
+                        {score?.innings=="1st"?(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler?(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler.economy_rate.toFixed(2)):(0.00)):(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler?(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler.economy_rate.toFixed(2)):(0.00))}
                         </td>
                     </tr>
                 </tbody>
@@ -397,11 +415,11 @@ const CountRuns = ()=>{
                 <div className="overflow-x-auto flex">
                 {score?.innings==="1st"?(oversData?.first_innings[oversData.fi_all_overs_length-1].balls?.length>0?(oversData.first_innings[oversData.fi_all_overs_length-1].balls?.map((item,index)=>(
                 <div className="text-center" key={index}>
-                    <div className="w-6 bg-red-400 h-6 mx-3 text-white text-sm rounded-full flex justify-center items-center border-2 border-gray-400">{item.runs}</div>
+                    <div className="w-8 bg-red-400 h-8 mx-3 text-white text-xs rounded-full flex justify-center items-center border-2 border-gray-400">{item.runs}</div>
                     <p className="text-xs font-semibold text-gray-400">{item.ball_type}</p>
                </div>))):("")):(oversData?.second_innings[oversData.si_all_overs_length-1].balls?.length>0?(oversData.second_innings[oversData.si_all_overs_length-1].balls?.map((item,index)=>(
                 <div className="text-center" key={index}>
-                    <div className="w-6 bg-red-400 h-6 mx-3 text-white text-sm rounded-full flex justify-center items-center border-2 border-gray-400">{item.runs}</div>
+                    <div className="w-8 bg-red-400 h-8 mx-3 text-white text-xs rounded-full flex justify-center items-center border-2 border-gray-400">{item.runs}</div>
                     <p className="text-xs font-semibold text-gray-400">{item.ball_type}</p>
                </div>))):(""))}
                 </div>
@@ -542,11 +560,11 @@ const CountRuns = ()=>{
                 </div>
                 {/*footer*/}
                 <div className="flex items-center justify-center p-6 border-t border-solid border-blueGray-200 rounded-b">
-                  <Link
+                  <button
                     className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-28 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                  onClick={()=>setIsWicketFall(true)}>
+                  onClick={(e)=>{doneSetRun(e)}}>
                     Done
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>
