@@ -15,7 +15,7 @@ const Register = ()=>{
     const handleSubmit = async(e)=>{
         e.preventDefault()
         setLoading(true)
-        const signup_request = await fetch('http://127.0.0.1:8000/author/register/',{method:'POST',headers:{
+        const signup_request = await fetch('https://cricket-scorer-final-project-back-end.onrender.com/author/register/',{method:'POST',headers:{
             'Content-Type':'application/json'
         },body:JSON.stringify({
             "username":username,
