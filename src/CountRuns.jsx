@@ -63,33 +63,33 @@ const CountRuns = ()=>{
         const getMatchData = async()=>{
             try{
                 setLoading(true)
-                const match_data = await fetch(`https://cricket-scorer-final-project-back-end.onrender.com/match/${match_id}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                const match_data = await fetch(`http://127.0.0.1:8000/match/${match_id}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                     "Content-Type":"application/json"}})
                 const match_data_response = await match_data.json()
             if (match_data_response.striker && match_data_response.non_striker){
                 setScore(match_data_response)
-                const striker_data = await fetch(`https://cricket-scorer-final-project-back-end.onrender.com/batsman/${match_data_response.striker}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                const striker_data = await fetch(`http://127.0.0.1:8000/batsman/${match_data_response.striker}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                     "Content-Type":"application/json"}})
                 const response_striker_data = await striker_data.json()
                 setStrikerData(response_striker_data)
-                const non_striker_data = await fetch(`https://cricket-scorer-final-project-back-end.onrender.com/batsman/${match_data_response.non_striker}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                const non_striker_data = await fetch(`http://127.0.0.1:8000/batsman/${match_data_response.non_striker}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                     "Content-Type":"application/json"}})
                 const response_non_striker_data = await non_striker_data.json()
                 setNonStrikerData(response_non_striker_data)
                 if(response_striker_data.team){
-                    const batting_team_data = await fetch(`https://cricket-scorer-final-project-back-end.onrender.com/teams/${response_striker_data.team}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                    const batting_team_data = await fetch(`http://127.0.0.1:8000/teams/${response_striker_data.team}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                         "Content-Type":"application/json"}})
                     const response_batting_team_data = await batting_team_data.json()
                     setBattingTeamData(response_batting_team_data)
                 }
                 if(response_striker_data.player){
-                    const striker_player_data = await fetch(`https://cricket-scorer-final-project-back-end.onrender.com/player/${response_striker_data.player}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                    const striker_player_data = await fetch(`http://127.0.0.1:8000/player/${response_striker_data.player}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                         "Content-Type":"application/json"}})
                     const response_striker_player = await striker_player_data.json()
                     setStrikerPlayer(response_striker_player)
                 }
                 if(response_non_striker_data.player){
-                    const non_striker_player_data = await fetch(`https://cricket-scorer-final-project-back-end.onrender.com/player/${response_non_striker_data.player}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                    const non_striker_player_data = await fetch(`http://127.0.0.1:8000/player/${response_non_striker_data.player}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                         "Content-Type":"application/json"}})
                     const response_non_striker_player = await non_striker_player_data.json()
                     setNonStrikerPlayer(response_non_striker_player)
@@ -97,7 +97,7 @@ const CountRuns = ()=>{
             }
                 if(match_data_response){
                     setLoading(false)
-                const overs_data =  await fetch(`https://cricket-scorer-final-project-back-end.onrender.com/match/get_overs_list/${match_id}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                const overs_data =  await fetch(`http://127.0.0.1:8000/match/get_overs_list/${match_id}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                     "Content-Type":"application/json"}})
                 const overs_data_response = await overs_data.json()
                 setOversData(overs_data_response)
@@ -131,7 +131,7 @@ const CountRuns = ()=>{
             //     "who_helped":whoHelped,
             //     "new_batsman":newBatsman
             // })
-            const updateScoreResponse = await fetch('https://cricket-scorer-final-project-back-end.onrender.com/match/update_score/',{method:'PUT',headers:{
+            const updateScoreResponse = await fetch('http://127.0.0.1:8000/match/update_score/',{method:'PUT',headers:{
                 Authorization:`Token ${Token}`,
                 "Content-Type":"application/json"
             },body:JSON.stringify({
@@ -162,7 +162,7 @@ const CountRuns = ()=>{
        if(bowlerName==""){
         console.log("Please insert a bowler name.")
        }else{
-        const addNewBowlerRequest = await fetch('https://cricket-scorer-final-project-back-end.onrender.com/match/add_new_over/',{method:'PUT',headers:{
+        const addNewBowlerRequest = await fetch('http://127.0.0.1:8000/match/add_new_over/',{method:'PUT',headers:{
             Authorization:`Token ${Token}`,
             "Content-Type":"application/json"
         },body:JSON.stringify({
@@ -250,7 +250,7 @@ const CountRuns = ()=>{
     }
     const startSecondInnings= async(e)=>{
         e.preventDefault()
-        const request_start_second_innings = await fetch('https://cricket-scorer-final-project-back-end.onrender.com/match/start_second_innings/',{method:'PUT',headers:{
+        const request_start_second_innings = await fetch('http://127.0.0.1:8000/match/start_second_innings/',{method:'PUT',headers:{
             Authorization:`Token ${Token}`,
             "Content-Type":"application/json"
         },body:JSON.stringify({
@@ -269,8 +269,8 @@ const CountRuns = ()=>{
     }
     // {score?.innings=="1st"?(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler?(console.log(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler)):(console.log("Bowler"))):(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler?(console.log(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler)):(console.log("Bowler")))}
     return (
-    <div style={{height:'100vh'}} className="bg-gray-200">
-       <div className="w-11/12 md:h-48  shadow-2xl rounded-2xl md:flex bg-green-500 justify-around p-4 m-auto bg-white">
+    <div style={{height:'100vh'}} className="bg-gray-200 mt-3">
+       <div style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}} className="w-11/12 md:h-48 rounded-2xl md:flex bg-gray-200 justify-around p-4 m-auto bg-white">
             <div className="h-full text-center w-72 m-auto">
                 <p className="font-bold">{battingTeamData?battingTeamData.team_name:""},{score?.innings} inning</p>
                 <div className="">
@@ -290,7 +290,7 @@ const CountRuns = ()=>{
 
 
         <div className="overflow-x-auto">
-            <table className="text-sm over m-auto w-11/12 mt-10 shadow-2xl text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <table style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}} className="text-sm over m-auto w-11/12 mt-10 text-left rtl:text-right  p-3 mb-3 rounded rounded-md">
                 <thead>
                     <tr className="border-gray-500 border-b-2">
                         <th scope="col" className="px-6 py-3">
@@ -315,42 +315,42 @@ const CountRuns = ()=>{
                 </thead>
                 <tbody>
                     <tr className="bg-white bg-white dark:border-gray-700">
-                        <th scope="row" className="px-6 py-4 font-medium">
+                        <th scope="row" className="px-6 py-4 font-bold">
                             {strikerPlayer?strikerPlayer.name:"Striker"}<span>*</span>
                         </th>
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-4 font-bold">
                             {strikerData?strikerData.run:0}
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-4 font-bold">
                             {strikerData?strikerData.ball:0}
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-4 font-bold">
                             {strikerData?strikerData.four:0}
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-4 font-bold">
                             {strikerData?strikerData.six:0}
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-4 font-bold">
                             {strikerData?strikerData.strike_rate.toFixed(2):0.00}
                         </td>
                     </tr>
                     <tr className="bg-white bg-white dark:border-gray-700">
-                        <th scope="row" className="px-6 py-4 font-medium">
+                        <th scope="row" className="px-6 py-4 font-bold">
                             {nonStrikerPlayer?nonStrikerPlayer.name:"Non Striker"}
                         </th>
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-4 font-bold">
                         {nonStrikerData?nonStrikerData.run:0}
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-4 font-bold">
                         {nonStrikerData?nonStrikerData.ball:0}
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-4 font-bold">
                         {nonStrikerData?nonStrikerData.four:0}
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-4 font-bold">
                         {nonStrikerData?nonStrikerData.six:0}
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-4 font-bold">
                         {nonStrikerData?nonStrikerData.strike_rate.toFixed(2):0.00}
                         </td>
                     </tr>
@@ -358,7 +358,7 @@ const CountRuns = ()=>{
             </table>
             </div>
             <div className="overflow-x-auto">
-            <table className="text-sm w-11/12 m-auto shadow-2xl text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <table style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}} className="text-sm w-11/12 m-auto text-left mb-3">
                 <thead>
                     <tr className="border-gray-500 border-b-2">
                         <th scope="col" className="px-6 py-3">
@@ -382,8 +382,8 @@ const CountRuns = ()=>{
                     </tr>
                 </thead>
                 <tbody>
-                    <tr className="bg-white bg-white dark:border-gray-700">
-                        <th scope="row" className="px-6 py-4 font-medium">
+                    <tr className="bg-white bg-white dark:border-gray-700 font-bold font-bold">
+                        <th scope="row" className="px-6 py-4">
                             {score?.innings=="1st"?(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler?(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler.name):("Bowler")):(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler?(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler.name):("Bowler"))}
                         </th>
                         <td className="px-6 py-4">
@@ -409,14 +409,14 @@ const CountRuns = ()=>{
                 </tbody>
             </table>
         </div>
-        <div className="w-11/12 h-16 p-2 shadow-md rounded-md m-auto mt-4">
+        <div style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}} className="w-11/12 h-16 p-2 rounded rounded-md m-auto mt-4">
             <div className="flex">
-                <h1 className="text-gray-500 font-semibold text-xs md:text-base">This over:</h1>
+                <h1 className="font-bold text-xs md:text-base">This over:</h1>
                 <div className="overflow-x-auto flex">
                 {score?.innings==="1st"?(oversData?.first_innings[oversData.fi_all_overs_length-1].balls?.length>0?(oversData.first_innings[oversData.fi_all_overs_length-1].balls?.map((item,index)=>(
                 <div className="text-center" key={index}>
                     <div className="w-8 bg-red-400 h-8 mx-3 text-white text-xs rounded-full flex justify-center items-center border-2 border-gray-400">{item.runs}</div>
-                    <p className="text-xs font-semibold text-gray-400">{item.ball_type}</p>
+                    <p className="text-xs font-bold">{item.ball_type}</p>
                </div>))):("")):(oversData?.second_innings[oversData.si_all_overs_length-1].balls?.length>0?(oversData.second_innings[oversData.si_all_overs_length-1].balls?.map((item,index)=>(
                 <div className="text-center" key={index}>
                     <div className="w-8 bg-red-400 h-8 mx-3 text-white text-xs rounded-full flex justify-center items-center border-2 border-gray-400">{item.runs}</div>
@@ -425,7 +425,7 @@ const CountRuns = ()=>{
                 </div>
             </div>
         </div>
-        <div className="w-11/12 m-auto md:h-16 p-2 shadow-md mt-5">
+        <div style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}} className="w-11/12 h-16 p-4 rounded rounded-md m-auto mt-4">
             <div className="flex justify-evenly flex-wrap">
             <div className="flex">
                 <div className="flex items-center">
@@ -445,7 +445,7 @@ const CountRuns = ()=>{
                 <div className="flex items-center">
                         <input className="w-6 h-4" type="checkbox" id="legByes" name="legByes"  onChange={(e)=>{handleChecked(e);handle_leg_byes_checked(e)}} checked={legByesChecked} />
                         <label htmlFor="legByes" className="font-bold text-gray-500">Leg Byes</label>
-                    </div>
+                </div>
                     <div className="flex items-center">
                         <input className="w-6 h-4" type="checkbox" id="wicket" name="wicket"  onChange={(e)=>{handleChecked(e);handle_wicket_checked(e)}} checked={wicketChecked} />
                         <label htmlFor="wicket" className="font-bold text-gray-500">Wicket</label>
@@ -459,8 +459,8 @@ const CountRuns = ()=>{
             </div>
             </div>
         </div>
-        <div className="md:h-52 flex w-11/12 m-auto rounded-md">
-            <div className="w-2/5 py-11 shadow-xl text-center my-auto">
+        <div className="md:h-52 flex gap-3 w-11/12 m-auto mt-3">
+            <div style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}} className="w-2/5 py-11 text-center my-auto rounded rounded-md">
                 <div className="m-3">
                     <Link className="bg-green-700 text-white font-base md:font-semibold rounded-md px-7 md:px-10 py-1">Undo</Link>
                 </div>
@@ -471,7 +471,7 @@ const CountRuns = ()=>{
                     <Link className="bg-green-700 text-white font-base md:font-semibold rounded-md px-7 md:px-10 py-1">Extras</Link>
                 </div>
             </div>
-            <div className="w-3/5 p-2 shadow-2xl mt-8 md:m-0">
+            <div style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}} className="w-3/5 p-2 rounded rounded-md mt-8 md:m-0">
                <div className="flex mt-2">
                <Link onClick={(e)=>updateScore(e,0)} className="md:w-20 md:h-20 w-10 h-10  font-bold   text-xl md:text-4xl flex items-center justify-center border-green-700 border-4 rounded-full m-auto">0</Link>
                 <Link onClick={(e)=>updateScore(e,1)} className="md:w-20 md:h-20 w-10 h-10  font-bold  text-xl md:text-4xl flex items-center justify-center border-green-700 border-4 rounded-full m-auto">1</Link>

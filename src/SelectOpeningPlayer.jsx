@@ -34,34 +34,34 @@ const SelectOpeningPlayer = ()=>{
         get_response()
     }
     return (
-        <div style={{height:'100vh'}} className="bg-slate-400 flex justify-center items-center">
-        <div>
-            <div className="w-72 p-4">
+        <div style={{height:'100vh'}} className="bg-slate-200 flex justify-center items-center">
+        <div style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}}className="p-6">
+            <div style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}} className="w-72 rounded rounded-md p-4">
                 <div>
-                    <h1>Striker</h1>
+                    <h1 className="font-bold">Striker</h1>
                 </div>
                 <div className="flex bg-white p-2 rounded-md">
-                    <input onChange={(e)=>setStriker(e.target.value)}  type="text" id={striker} className="border-b dark:text-gray-900 text-sm block w-full p-1 dark:border-gray-600 dark:placeholder-gray-400 text-white outline-none focus:border-green-800 focus:border-b-2" placeholder={striker} required />
+                    <input onChange={(e)=>setStriker(e.target.value)}  type="text" id={striker} className="border-b dark:text-gray-900 text-sm block w-full p-1 dark:border-gray-600 dark:placeholder-gray-400 text-white outline-none focus:border-green-800 focus:border-b-2 font-bold" placeholder={striker} required />
                 </div>   
             </div>
-            <div className="w-72 p-4">
+            <div style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}} className="w-72 p-4 rounded rounded-md mt-3">
                 <div>
-                    <h1>Non-Striker</h1>
+                    <h1 className="font-bold">Non-Striker</h1>
                 </div>
                 <div className="flex bg-white p-2 rounded-md">
-                    <input onChange={(e)=>setNonStriker(e.target.value)}  type="text" id={nonStriker} className="border-b dark:text-gray-900 text-sm block w-full p-1 dark:border-gray-600 dark:placeholder-gray-400 text-white outline-none focus:border-green-800 focus:border-b-2" placeholder={nonStriker} required />
+                    <input onChange={(e)=>setNonStriker(e.target.value)}  type="text" id={nonStriker} className="border-b dark:text-gray-900 text-sm block w-full p-1 dark:border-gray-600 dark:placeholder-gray-400 text-white outline-none focus:border-green-800 focus:border-b-2 font-bold" placeholder={nonStriker} required />
                 </div>   
             </div>
-            <div className="w-72 p-4">
+            <div style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}} className="w-72 p-4 mt-3 rounded rounded-md mb-3">
                 <div>
-                    <h1>Opening Bowler</h1>
+                    <h1 className="font-bold">Opening Bowler</h1>
                 </div>
                 <div className="flex bg-white p-2 rounded-md">
-                    <input onChange={(e)=>setBowler(e.target.value)}  type="text" id={bowler} className="border-b dark:text-gray-900 text-sm block w-full p-1 dark:border-gray-600 dark:placeholder-gray-400 text-white outline-none focus:border-green-800 focus:border-b-2" placeholder={bowler} required />
+                    <input onChange={(e)=>setBowler(e.target.value)}  type="text" id={bowler} className="border-b dark:text-gray-900 text-sm block w-full p-1 dark:border-gray-600 dark:placeholder-gray-400 text-white outline-none focus:border-green-800 focus:border-b-2 font-bold" placeholder={bowler} required />
                 </div>   
             </div>
             <div className="flex justify-center">
-                <Link onClick={onSubmit} className="w-64 p-2 flex items-center justify-center rounded-xl text-center text-white bg-green-600">{loading?(
+                <Link onClick={onSubmit} className="w-64 font-bold p-2 flex items-center justify-center rounded-xl text-center text-white bg-green-600">{loading?(
                     <div class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full dark:text-blue-500" role="status" aria-label="loading">
                     <span class="sr-only">Loading...</span>
                   </div>

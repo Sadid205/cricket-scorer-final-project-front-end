@@ -37,66 +37,66 @@ const NewMatch = ()=>{
         start_match()
     }
     return (
-        <div style={{height:'100vh'}} className="bg-gray-700 flex justify-center items-center">
-            <div>
+        <div style={{height:'100vh'}} className="bg-gray-200 flex justify-center items-center">
+            <div style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}} className="bg-gray-200 p-3 rounded rounded-6">
             <div className="w-72 p-4">
                 <div>
-                    <h1>Teams</h1>
+                    <h1 className="font-bold">Teams</h1>
                 </div>
-               <div className="bg-white rounded-md shadow-md p-2">
+               <div style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}} className="bg-gray-200 rounded-md shadow-md p-2">
                     <div className="m-2">
-                        <input onChange={(e)=>(setHostTeam(e.target.value))} type="text" id="host_team" className="border-b dark:text-gray-900 text-sm block w-full p-1 dark:border-gray-600 dark:placeholder-gray-400 text-white outline-none focus:border-green-800 focus:border-b-2" placeholder={hostTeam} required />
+                        <input onChange={(e)=>(setHostTeam(e.target.value))} type="text" id="host_team" className="border-b dark:text-gray-900 text-sm block w-full p-1 dark:border-gray-600 dark:placeholder-gray-400 text-white outline-none focus:border-green-800 focus:border-b-2 font-bold" placeholder={hostTeam} required />
                     </div>
                     <div className="m-2">
-                        <input onChange={(e)=>(setVisitorTeam(e.target.value))} type="text" id="visitor_team" className="border-b dark:text-gray-900 text-sm block w-full p-2 dark:border-gray-600 dark:placeholder-gray-400 text-white outline-none focus:border-green-800 focus:border-b-2" placeholder={visitorTeam} required />
+                        <input onChange={(e)=>(setVisitorTeam(e.target.value))} type="text" id="visitor_team" className="border-b dark:text-gray-900 text-sm block w-full p-2 dark:border-gray-600 dark:placeholder-gray-400 text-white outline-none focus:border-green-800 focus:border-b-2 font-bold" placeholder={visitorTeam} required />
                     </div>
                </div>
                 
             </div>
             <div className="w-72 p-4">
                 <div>
-                    <h1>Toss Won By?</h1>
+                    <h1 className="font-bold">Toss Won By?</h1>
                 </div>
                 <div className="flex bg-white p-2 rounded-md">
                     <div>
                         <input onChange={(e)=>setTossWinner(e.target.value)} type="radio" id={hostTeam} name="fav_language" value={hostTeam}/>
-                        <label htmlFor={hostTeam}>{hostTeam}</label><br/>
+                        <label className="font-bold" htmlFor={hostTeam}>{hostTeam}</label><br/>
                     </div>
                     <div className="ms-3">
                         <input onChange={(e)=>setTossWinner(e.target.value)} type="radio" id={visitorTeam} name="fav_language" value={visitorTeam}/>
-                        <label htmlFor="visitorTeam">{visitorTeam}</label><br/>    
+                        <label className="font-bold" htmlFor="visitorTeam">{visitorTeam}</label><br/>    
                     </div>        
                 </div>   
             </div>
             <div className="w-72 p-4">
                 <div>
-                    <h1>Elected to?</h1>
+                    <h1 className="font-bold">Elected to?</h1>
                 </div>
                 <div className="flex bg-white p-2 rounded-md">
                     <div>
                         <input onChange={(e)=>setElected(e.target.value)} type="radio" id="Bat" name="elected" value="Bat"/>
-                        <label htmlFor="Bat">Bat</label><br/>
+                        <label className="font-bold" htmlFor="Bat">Bat</label><br/>
                     </div>
                     <div className="ms-3">
                         <input onChange={(e)=>setElected(e.target.value)} type="radio" id="Bowl" name="elected" value="Bowl"/>
-                        <label htmlFor="Bowl">Bowl</label><br/>   
+                        <label className="font-bold" htmlFor="Bowl">Bowl</label><br/>   
                     </div>        
                 </div>   
             </div>
             <div className="w-72 p-4">
                 <div>
-                    <h1>Overs to?</h1>
+                    <h1 className="font-bold">Overs to?</h1>
                 </div>
                 <div className="flex bg-white p-2 rounded-md">
-                    <input onChange={(e)=>(setOver(e.target.value))} type="number" id="over" className="border-b dark:text-gray-900 text-sm block w-full p-1 dark:border-gray-600 dark:placeholder-gray-400 text-white outline-none focus:border-green-800 focus:border-b-2" placeholder={over} required />
+                    <input onChange={(e)=>(setOver(e.target.value))} type="number" id="over" className="border-b dark:text-gray-900 text-sm block w-full p-1 dark:border-gray-600 dark:placeholder-gray-400 text-white outline-none focus:border-green-800 font-bold focus:border-b-2" placeholder={over} required />
                 </div>   
             </div>
             <div className="flex justify-evenly gap-2">
                 <div>
-                    <Link className="font-semi-bold">Advanced Settings</Link>
+                    <Link className="font-bold">Advanced Settings</Link>
                 </div>
                 <div>
-                    <Link onClick={(e)=>onSubmit(e)} className="bg-green-700 py-2 flex items-center w-28 justify-center  rounded-md text-white">{loading?(
+                    <Link onClick={(e)=>onSubmit(e)} className="bg-green-700 py-2 flex items-center w-28 justify-center font-bold rounded-md text-white">{loading?(
                         <div class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full dark:text-blue-500" role="status" aria-label="loading">
                         </div>):("Start Match")}
                         </Link>
