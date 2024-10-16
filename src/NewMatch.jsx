@@ -27,11 +27,9 @@ const NewMatch = ()=>{
                 })
             })
         const new_match = await newMatchResponse.json()
-        if(new_match){
-            setLoading(false)
-            localStorage.setItem("match_id",new_match.match_id)
-            navigate('/select_opening_player')
-        }
+        setLoading(false)
+        localStorage.setItem("match_id",new_match.match_id)
+        navigate('/select_opening_player')
         }
         
         start_match()
