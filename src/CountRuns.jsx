@@ -63,33 +63,33 @@ const CountRuns = ()=>{
         const getMatchData = async()=>{
             try{
                 setLoading(true)
-                const match_data = await fetch(`http://127.0.0.1:8000/match/${match_id}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                const match_data = await fetch(`https://cricket-scorer-final-project-back-end.onrender.com/match/${match_id}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                     "Content-Type":"application/json"}})
                 const match_data_response = await match_data.json()
             if (match_data_response.striker && match_data_response.non_striker){
                 setScore(match_data_response)
-                const striker_data = await fetch(`http://127.0.0.1:8000/batsman/${match_data_response.striker}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                const striker_data = await fetch(`https://cricket-scorer-final-project-back-end.onrender.com/batsman/${match_data_response.striker}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                     "Content-Type":"application/json"}})
                 const response_striker_data = await striker_data.json()
                 setStrikerData(response_striker_data)
-                const non_striker_data = await fetch(`http://127.0.0.1:8000/batsman/${match_data_response.non_striker}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                const non_striker_data = await fetch(`https://cricket-scorer-final-project-back-end.onrender.com/batsman/${match_data_response.non_striker}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                     "Content-Type":"application/json"}})
                 const response_non_striker_data = await non_striker_data.json()
                 setNonStrikerData(response_non_striker_data)
                 if(response_striker_data.team){
-                    const batting_team_data = await fetch(`http://127.0.0.1:8000/teams/${response_striker_data.team}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                    const batting_team_data = await fetch(`https://cricket-scorer-final-project-back-end.onrender.com/teams/${response_striker_data.team}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                         "Content-Type":"application/json"}})
                     const response_batting_team_data = await batting_team_data.json()
                     setBattingTeamData(response_batting_team_data)
                 }
                 if(response_striker_data.player){
-                    const striker_player_data = await fetch(`http://127.0.0.1:8000/player/${response_striker_data.player}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                    const striker_player_data = await fetch(`https://cricket-scorer-final-project-back-end.onrender.com/player/${response_striker_data.player}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                         "Content-Type":"application/json"}})
                     const response_striker_player = await striker_player_data.json()
                     setStrikerPlayer(response_striker_player)
                 }
                 if(response_non_striker_data.player){
-                    const non_striker_player_data = await fetch(`http://127.0.0.1:8000/player/${response_non_striker_data.player}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                    const non_striker_player_data = await fetch(`https://cricket-scorer-final-project-back-end.onrender.com/player/${response_non_striker_data.player}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                         "Content-Type":"application/json"}})
                     const response_non_striker_player = await non_striker_player_data.json()
                     setNonStrikerPlayer(response_non_striker_player)
@@ -97,7 +97,7 @@ const CountRuns = ()=>{
             }
                 if(match_data_response){
                     setLoading(false)
-                const overs_data =  await fetch(`http://127.0.0.1:8000/match/get_overs_list/${match_id}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                const overs_data =  await fetch(`https://cricket-scorer-final-project-back-end.onrender.com/match/get_overs_list/${match_id}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                     "Content-Type":"application/json"}})
                 const overs_data_response = await overs_data.json()
                 setOversData(overs_data_response)
@@ -131,7 +131,7 @@ const CountRuns = ()=>{
             //     "who_helped":whoHelped,
             //     "new_batsman":newBatsman
             // })
-            const updateScoreResponse = await fetch('http://127.0.0.1:8000/match/update_score/',{method:'PUT',headers:{
+            const updateScoreResponse = await fetch('https://cricket-scorer-final-project-back-end.onrender.com/match/update_score/',{method:'PUT',headers:{
                 Authorization:`Token ${Token}`,
                 "Content-Type":"application/json"
             },body:JSON.stringify({
@@ -162,7 +162,7 @@ const CountRuns = ()=>{
        if(bowlerName==""){
         console.log("Please insert a bowler name.")
        }else{
-        const addNewBowlerRequest = await fetch('http://127.0.0.1:8000/match/add_new_over/',{method:'PUT',headers:{
+        const addNewBowlerRequest = await fetch('https://cricket-scorer-final-project-back-end.onrender.com/match/add_new_over/',{method:'PUT',headers:{
             Authorization:`Token ${Token}`,
             "Content-Type":"application/json"
         },body:JSON.stringify({
@@ -250,7 +250,7 @@ const CountRuns = ()=>{
     }
     const startSecondInnings= async(e)=>{
         e.preventDefault()
-        const request_start_second_innings = await fetch('http://127.0.0.1:8000/match/start_second_innings/',{method:'PUT',headers:{
+        const request_start_second_innings = await fetch('https://cricket-scorer-final-project-back-end.onrender.com/match/start_second_innings/',{method:'PUT',headers:{
             Authorization:`Token ${Token}`,
             "Content-Type":"application/json"
         },body:JSON.stringify({
@@ -269,7 +269,7 @@ const CountRuns = ()=>{
     }
     // {score?.innings=="1st"?(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler?(console.log(oversData?.first_innings[oversData.fi_all_overs_length-1]?.bowler)):(console.log("Bowler"))):(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler?(console.log(oversData?.second_innings[oversData.si_all_overs_length-1]?.bowler)):(console.log("Bowler")))}
     return (
-    <div style={{height:'100vh'}} className="bg-gray-200 mt-3">
+    <div style={{height:'100vh'}} className="mt-3">
        <div style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}} className="w-11/12 md:h-48 rounded-2xl md:flex bg-gray-200 justify-around p-4 m-auto bg-white">
             <div className="h-full text-center w-72 m-auto">
                 <p className="font-bold">{battingTeamData?battingTeamData.team_name:""},{score?.innings} inning</p>
