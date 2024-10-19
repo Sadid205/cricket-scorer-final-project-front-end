@@ -21,7 +21,7 @@ const Header = ()=>{
       const logoutHandler = async()=>{
         try{
           setLoading(true)
-          const request_logout = await fetch('https://cricket-scorer-final-project-back-end.onrender.com/author/logout/',{
+          const request_logout = await fetch('https://cricketscorer.vercel.app/author/logout/',{
             method:"GET",
             headers:{
               Authorization:`Token ${Token}`,

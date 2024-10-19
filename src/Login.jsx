@@ -11,7 +11,7 @@ const Login = ()=>{
 const handleSubmit= async(e)=>{
     e.preventDefault()
     setLoading(true)
-    const request_login = await fetch('https://cricket-scorer-final-project-back-end.onrender.com/author/login/',{method:'POST',headers:{
+    const request_login = await fetch('https://cricketscorer.vercel.app/author/login/',{method:'POST',headers:{
         'Content-Type':'application/json'
     },body:JSON.stringify({
         "username":username,

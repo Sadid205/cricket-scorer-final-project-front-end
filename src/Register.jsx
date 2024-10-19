@@ -15,7 +15,7 @@ const Register = ()=>{
     const handleSubmit = async(e)=>{
         e.preventDefault()
         setLoading(true)
-        const signup_request = await fetch('https://cricket-scorer-final-project-back-end.onrender.com/author/register/',{method:'POST',headers:{
+        const signup_request = await fetch('https://cricketscorer.vercel.app/author/register/',{method:'POST',headers:{
             'Content-Type':'application/json'
         },body:JSON.stringify({
             "username":username,

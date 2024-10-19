@@ -14,7 +14,7 @@ const NewMatch = ()=>{
         e.preventDefault();
         const start_match = async()=>{
             setLoading(true)
-            const newMatchResponse = await fetch('https://cricket-scorer-final-project-back-end.onrender.com/match/start/',{method:'POST',headers:{
+            const newMatchResponse = await fetch('https://cricketscorer.vercel.app/match/start/',{method:'POST',headers:{
                 Authorization:`Token ${Token}`,
                 "Content-Type":"application/json"
             },body:JSON.stringify({
@@ -28,10 +28,10 @@ const NewMatch = ()=>{
             })
         const new_match = await newMatchResponse.json()
         if(new_match){
-            setLoading(false)
             localStorage.setItem("match_id",new_match.match_id)
+            setLoading(false)
+            navigate('/select_opening_player')
         }
-        navigate('/select_opening_player')
         }
         
         start_match()
