@@ -425,38 +425,38 @@ const CountRuns = ()=>{
                 </div>
             </div>
         </div>
-        <div style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}} className="w-11/12 h-16 p-4 rounded rounded-md m-auto mt-4">
+        <div style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}} className="w-11/12 md:h-20 h-32 p-4 rounded rounded-md m-auto mt-4">
             <div className="flex justify-evenly flex-wrap">
-            <div className="flex">
-                <div className="flex items-center">
-                    <input onChange={(e)=>{handleChecked(e);handle_wide_checked(e)}} checked={wideChecked} className="w-6 h-4" type="checkbox" id="wide" name="wide"/>
-                    <label htmlFor="wide" className="font-bold text-gray-500">Wide</label>
+                <div className="flex">
+                    <div className="flex items-center">
+                        <input onChange={(e)=>{handleChecked(e);handle_wide_checked(e)}} checked={wideChecked} className="w-6 h-4" type="checkbox" id="wide" name="wide"/>
+                        <label htmlFor="wide" className="font-bold text-gray-500">Wide</label>
+                    </div>
+                    <div className="flex items-center">
+                        <input className="w-6 h-4" type="checkbox" id="noBall" name="noBall"  onChange={(e)=>{handleChecked(e);handle_no_ball_checked(e)}} checked={noBallChecked} />
+                        <label htmlFor="noBall" className="font-bold text-gray-500">No Ball</label>
+                    </div>
+                    <div className="flex items-center">
+                        <input className="w-6 h-4" type="checkbox" id="byes" name="byes" onChange={(e)=>{handleChecked(e);handle_byes_checked(e)}} checked={byesChecked} />
+                        <label htmlFor="byes" className="font-bold text-gray-500">Byes</label>
+                    </div>
                 </div>
-                <div className="flex items-center">
-                    <input className="w-6 h-4" type="checkbox" id="noBall" name="noBall"  onChange={(e)=>{handleChecked(e);handle_no_ball_checked(e)}} checked={noBallChecked} />
-                    <label htmlFor="noBall" className="font-bold text-gray-500">No Ball</label>
-                </div>
-                <div className="flex items-center">
-                    <input className="w-6 h-4" type="checkbox" id="byes" name="byes" onChange={(e)=>{handleChecked(e);handle_byes_checked(e)}} checked={byesChecked} />
-                    <label htmlFor="byes" className="font-bold text-gray-500">Byes</label>
-                </div>
-            </div>
-            <div className="flex items-center flex-wrap">
-                <div className="flex items-center">
-                        <input className="w-6 h-4" type="checkbox" id="legByes" name="legByes"  onChange={(e)=>{handleChecked(e);handle_leg_byes_checked(e)}} checked={legByesChecked} />
-                        <label htmlFor="legByes" className="font-bold text-gray-500">Leg Byes</label>
-                </div>
+                <div className="flex items-center flex-wrap">
+                    <div className="flex items-center">
+                            <input className="w-6 h-4" type="checkbox" id="legByes" name="legByes"  onChange={(e)=>{handleChecked(e);handle_leg_byes_checked(e)}} checked={legByesChecked} />
+                            <label htmlFor="legByes" className="font-bold text-gray-500">Leg Byes</label>
+                    </div>
                     <div className="flex items-center">
                         <input className="w-6 h-4" type="checkbox" id="wicket" name="wicket"  onChange={(e)=>{handleChecked(e);handle_wicket_checked(e)}} checked={wicketChecked} />
                         <label htmlFor="wicket" className="font-bold text-gray-500">Wicket</label>
                     </div>
                     <div className="flex items-center m-auto">
-                    <Link onClick={()=>{setRetire(true)}} className="border px-4 py-1 rounded-md bg-green-600 md:text-base text-xs md:font-bold text-white border-2">Retire</Link>
+                        <Link onClick={()=>{setRetire(true)}} className="border px-4 py-1 rounded-md bg-green-600 md:text-base text-xs md:font-bold text-white border-2">Retire</Link>
                     </div>
                     <div className="flex items-center m-auto">
-                    <Link onClick={()=>{setSwapBatsman(true)}} className="border px-4 py-1 rounded-md bg-green-600 text-xs md:text-base md:font-semibold text-white border-2">Swap Batsman</Link>
+                        <Link onClick={()=>{setSwapBatsman(true)}} className="border px-4 py-1 rounded-md bg-green-600 text-xs md:text-base md:font-semibold text-white border-2">Swap Batsman</Link>
                     </div>
-            </div>
+                </div>
             </div>
         </div>
         <div className="md:h-52 flex gap-3 w-11/12 m-auto mt-3">
