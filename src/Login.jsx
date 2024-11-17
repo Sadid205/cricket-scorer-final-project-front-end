@@ -42,6 +42,13 @@ const handleSubmit= async(e)=>{
 return (
 <>
 <div className="bg-gray-700 text-white flex min-h-screen flex-col items-center pt-16 sm:justify-center sm:pt-0">
+<div style={{
+          boxShadow:
+          "rgba(0, 0, 0, 0.15) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
+          }} className='w-96 rounded-md mb-4 mx-auto p-3'>
+          <p><span className='font-semibold'>Username:</span> <span className=''>sadid_1914</span></p>
+          <p><span className='font-semibold'>Password:</span> <span>Naim12345</span></p>
+        </div>
   <a href="#">
     <div className="text-foreground font-semibold text-2xl tracking-tighter mx-auto flex items-center gap-2">
         <p>Login Page</p>
