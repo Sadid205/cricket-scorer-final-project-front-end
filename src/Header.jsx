@@ -10,6 +10,7 @@ const Header = ()=>{
     const [open,setOpen] = useState(false)
     const Token = localStorage.getItem("Token")
     const [loading,setLoading] = useState(false)
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     const Links = [
         { name: "Home", link: "/" },
         // { name: "Supports", link: "/supports" },
@@ -21,7 +22,7 @@ const Header = ()=>{
       const logoutHandler = async()=>{
         try{
           setLoading(true)
-          const request_logout = await fetch('https://cricketscorer.vercel.app/author/logout/',{
+          const request_logout = await fetch(`${VITE_REQUEST_URL}author/logout/`,{
             method:"GET",
             headers:{
               Authorization:`Token ${Token}`,

@@ -32,6 +32,7 @@ const CountRuns = ()=>{
     const [secondInningsNonStriker,setSecondInningsNonStriker] = useState("")
     const [secondInningsBowler,setSecondInningsBowler] = useState("")
     const [showMatchFinishedModal,setShowMatchFinishedModal] = useState(false)
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     const [loading,setLoading] = useState(false)
     
     useEffect(()=>{
@@ -63,33 +64,33 @@ const CountRuns = ()=>{
         const getMatchData = async()=>{
             try{
                 setLoading(true)
-                const match_data = await fetch(`https://cricketscorer.vercel.app/match/${match_id}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                const match_data = await fetch(`${VITE_REQUEST_URL}match/${match_id}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                     "Content-Type":"application/json"}})
                 const match_data_response = await match_data.json()
             if (match_data_response.striker && match_data_response.non_striker){
                 setScore(match_data_response)
-                const striker_data = await fetch(`https://cricketscorer.vercel.app/batsman/${match_data_response.striker}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                const striker_data = await fetch(`${VITE_REQUEST_URL}batsman/${match_data_response.striker}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                     "Content-Type":"application/json"}})
                 const response_striker_data = await striker_data.json()
                 setStrikerData(response_striker_data)
-                const non_striker_data = await fetch(`https://cricketscorer.vercel.app/batsman/${match_data_response.non_striker}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                const non_striker_data = await fetch(`${VITE_REQUEST_URL}batsman/${match_data_response.non_striker}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                     "Content-Type":"application/json"}})
                 const response_non_striker_data = await non_striker_data.json()
                 setNonStrikerData(response_non_striker_data)
                 if(response_striker_data.team){
-                    const batting_team_data = await fetch(`https://cricketscorer.vercel.app/teams/${response_striker_data.team}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                    const batting_team_data = await fetch(`${VITE_REQUEST_URL}teams/${response_striker_data.team}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                         "Content-Type":"application/json"}})
                     const response_batting_team_data = await batting_team_data.json()
                     setBattingTeamData(response_batting_team_data)
                 }
                 if(response_striker_data.player){
-                    const striker_player_data = await fetch(`https://cricketscorer.vercel.app/player/${response_striker_data.player}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                    const striker_player_data = await fetch(`${VITE_REQUEST_URL}player/${response_striker_data.player}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                         "Content-Type":"application/json"}})
                     const response_striker_player = await striker_player_data.json()
                     setStrikerPlayer(response_striker_player)
                 }
                 if(response_non_striker_data.player){
-                    const non_striker_player_data = await fetch(`https://cricketscorer.vercel.app/player/${response_non_striker_data.player}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                    const non_striker_player_data = await fetch(`${VITE_REQUEST_URL}player/${response_non_striker_data.player}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                         "Content-Type":"application/json"}})
                     const response_non_striker_player = await non_striker_player_data.json()
                     setNonStrikerPlayer(response_non_striker_player)
@@ -97,7 +98,7 @@ const CountRuns = ()=>{
             }
                 if(match_data_response){
                     setLoading(false)
-                const overs_data =  await fetch(`https://cricketscorer.vercel.app/match/get_overs_list/${match_id}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
+                const overs_data =  await fetch(`${VITE_REQUEST_URL}match/get_overs_list/${match_id}/`,{method:'GET',headers:{ Authorization:`Token ${Token}`,
                     "Content-Type":"application/json"}})
                 const overs_data_response = await overs_data.json()
                 setOversData(overs_data_response)
@@ -131,7 +132,7 @@ const CountRuns = ()=>{
             //     "who_helped":whoHelped,
             //     "new_batsman":newBatsman
             // })
-            const updateScoreResponse = await fetch('https://cricketscorer.vercel.app/match/update_score/',{method:'PUT',headers:{
+            const updateScoreResponse = await fetch(`${VITE_REQUEST_URL}match/update_score/`,{method:'PUT',headers:{
                 Authorization:`Token ${Token}`,
                 "Content-Type":"application/json"
             },body:JSON.stringify({
@@ -162,7 +163,7 @@ const CountRuns = ()=>{
        if(bowlerName==""){
         console.log("Please insert a bowler name.")
        }else{
-        const addNewBowlerRequest = await fetch('https://cricketscorer.vercel.app/match/add_new_over/',{method:'PUT',headers:{
+        const addNewBowlerRequest = await fetch(`${VITE_REQUEST_URL}match/add_new_over/`,{method:'PUT',headers:{
             Authorization:`Token ${Token}`,
             "Content-Type":"application/json"
         },body:JSON.stringify({
@@ -250,7 +251,7 @@ const CountRuns = ()=>{
     }
     const startSecondInnings= async(e)=>{
         e.preventDefault()
-        const request_start_second_innings = await fetch('https://cricketscorer.vercel.app/match/start_second_innings/',{method:'PUT',headers:{
+        const request_start_second_innings = await fetch(`${VITE_REQUEST_URL}match/start_second_innings/`,{method:'PUT',headers:{
             Authorization:`Token ${Token}`,
             "Content-Type":"application/json"
         },body:JSON.stringify({

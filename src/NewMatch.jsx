@@ -9,12 +9,13 @@ const NewMatch = ()=>{
     const navigate = useNavigate();
     const [over,setOver] = useState(5)
     const [loading,setLoading] = useState(false)
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     const onSubmit = (e)=>{
         const Token = localStorage.getItem("Token")
         e.preventDefault();
         const start_match = async()=>{
             setLoading(true)
-            const newMatchResponse = await fetch('https://cricketscorer.vercel.app/match/start/',{method:'POST',headers:{
+            const newMatchResponse = await fetch(`${VITE_REQUEST_URL}match/start/`,{method:'POST',headers:{
                 Authorization:`Token ${Token}`,
                 "Content-Type":"application/json"
             },body:JSON.stringify({

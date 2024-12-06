@@ -2,16 +2,19 @@ import { useState } from "react";
 import { ToastContainer,toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
 import { useNavigate } from "react-router-dom";
+import {GoogleOAuthProvider,GoogleLogin} from '@react-oauth/google'
 const Login = ()=>{
     const navigate = useNavigate()
     const [username,setUsername] = useState("")
     const [password,setPassword] = useState("")
     const [responseLogin,setResponseLogin] = useState()
     const [loading,setLoading] = useState(false)
+    const CLIENT_ID=import.meta.env.VITE_CLIENT_ID
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
 const handleSubmit= async(e)=>{
     e.preventDefault()
     setLoading(true)
-    const request_login = await fetch('https://cricketscorer.vercel.app/author/login/',{method:'POST',headers:{
+    const request_login = await fetch(`${VITE_REQUEST_URL}author/login/`,{method:'POST',headers:{
         'Content-Type':'application/json'
     },body:JSON.stringify({
         "username":username,
@@ -33,11 +36,47 @@ const handleSubmit= async(e)=>{
         }
         notify()
         navigate("/")
+    }else{
+      const notify=()=>{
+        toast("Somthing went wrong.Please try again!")
+      }
+      notify()
+      navigate("/login")
     }
     // console.log({
     //     "username":username,
     //     "password":password
     // })
+}
+const handleLogin = async(response)=>{
+  const AccessToken = response.credential
+  try{
+    const getResponse = await fetch(`${VITE_REQUEST_URL}author/api/auth/google/`,{method:'POST',headers:{
+      'Content-Type':'application/json'
+  },body:JSON.stringify({
+    "access_token":AccessToken
+    })
+  })
+  const responseData = await getResponse.json()
+  if(responseData.Token && responseData.author_id && responseData.user_id){
+    localStorage.setItem("Token",`${responseData.Token}`)
+    localStorage.setItem("author_id",`${responseData.author_id}`)
+    localStorage.setItem("user_id",`${responseData.user_id}`)
+    const notify=()=>{
+      toast("Login Success!")
+    }
+    notify()
+    navigate("/")
+  }else{
+    const notify=()=>{
+      toast("Somthing went wrong.Please try again!")
+    }
+    notify()
+    navigate("/login")
+  }
+  }catch(e){
+    console.log(e)
+  }
 }
 return (
 <>
@@ -96,7 +135,7 @@ return (
               <input type="checkbox" name="remember" className="outline-none focus:outline focus:outline-sky-300" />
               <span className="text-xs">Remember me</span>
             </label> */}
-            <a className="text-sm font-medium text-foreground underline" href="/forgot-password">Forgot
+            <a className="text-sm font-medium text-foreground underline" href="#">Forgot
               password?</a>
           </div>
           <div className="mt-4 flex items-center justify-end gap-x-2">
@@ -109,6 +148,11 @@ return (
       </div>
     </div>
   </div>
+  <GoogleOAuthProvider clientId={CLIENT_ID}>
+      <div className="mt-4">
+        <GoogleLogin onSuccess={(response)=>handleLogin(response)} onError={()=>console.log("Login Failed!")}/>
+      </div>
+  </GoogleOAuthProvider>
 </div>
 <div>
     <ToastContainer />

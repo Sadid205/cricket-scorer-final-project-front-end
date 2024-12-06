@@ -7,13 +7,14 @@ const SelectOpeningPlayer = ()=>{
     const [bowler,setBowler] = useState("Player Name")
     const match_id = localStorage.getItem("match_id")
     const [loading,setLoading] = useState(false)
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     const onSubmit = (e)=>{
         const Token = localStorage.getItem("Token")
         e.preventDefault()
         // console.log(striker,nonStriker,bowler,match_id)
         const get_response = async()=>{
             setLoading(true)
-            const select_player = await fetch('https://cricketscorer.vercel.app/match/select_opening_player/',{method:'POST',headers:{
+            const select_player = await fetch(`${VITE_REQUEST_URL}match/select_opening_player/`,{method:'POST',headers:{
                 Authorization:`Token ${Token}`,
                 "Content-Type":"application/json"
             },body:JSON.stringify({

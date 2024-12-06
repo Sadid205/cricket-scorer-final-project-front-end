@@ -12,10 +12,11 @@ const Register = ()=>{
     const [confirmPassword,setConfirmPassword] = useState("")
     const [signUpResponse,setSignUpResponse] = useState()
     const [loading,setLoading] = useState(false)
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     const handleSubmit = async(e)=>{
         e.preventDefault()
         setLoading(true)
-        const signup_request = await fetch('https://cricketscorer.vercel.app/author/register/',{method:'POST',headers:{
+        const signup_request = await fetch(`${VITE_REQUEST_URL}author/register/`,{method:'POST',headers:{
             'Content-Type':'application/json'
         },body:JSON.stringify({
             "username":username,
