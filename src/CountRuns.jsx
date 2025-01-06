@@ -38,10 +38,11 @@ const CountRuns = ()=>{
     const [showMatchFinishedModal,setShowMatchFinishedModal] = useState(false)
     const [loading,setLoading] = useState(false)
     const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
+    const VITE_WS_REQUEST_URL=import.meta.env.VITE_WS_REQUEST_URL
     const [socket,setSocket] = useState(null)
     const [increase,setIncrease] = useState(0)
    useEffect(()=>{
-    const socketInstance = new WebSocket(`ws://localhost:8000/ws/test/${match_id}/`);
+    const socketInstance = new WebSocket(`${VITE_WS_REQUEST_URL}ws/test/${match_id}/`);
     socketInstance.onopen = function(event){
       const match_data = JSON.parse(event.data)
       setScore(match_data)
