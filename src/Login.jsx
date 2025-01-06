@@ -4,69 +4,38 @@ import 'react-toastify/dist/ReactToastify.css'
 import { useNavigate } from "react-router-dom";
 import {GoogleOAuthProvider,GoogleLogin} from '@react-oauth/google'
 const Login = ()=>{
-    const navigate = useNavigate()
-    const [username,setUsername] = useState("")
-    const [password,setPassword] = useState("")
-    const [responseLogin,setResponseLogin] = useState()
-    const [loading,setLoading] = useState(false)
-    const CLIENT_ID=import.meta.env.VITE_CLIENT_ID
-    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
-const handleSubmit= async(e)=>{
-    e.preventDefault()
-    setLoading(true)
-    const request_login = await fetch(`${VITE_REQUEST_URL}author/login/`,{method:'POST',headers:{
-        'Content-Type':'application/json'
-    },body:JSON.stringify({
-        "username":username,
-        "password":password,
-        })
-    })
-    const response_login = await request_login.json()
-    setResponseLogin(response_login)
-    if(response_login){
-      setLoading(false)
-    }
-    if(response_login && response_login.Token && response_login.author_id &&  response_login.user_id )
-    {
-        localStorage.setItem("Token",`${response_login.Token}`)
-        localStorage.setItem("author_id",`${response_login.author_id}`)
-        localStorage.setItem("user_id",`${response_login.user_id}`)
-        const notify = ()=>{
-            toast("Login Success!")
-        }
-        notify()
-        navigate("/")
-    }else{
-      const notify=()=>{
-        toast("Somthing went wrong.Please try again!")
-      }
-      notify()
-      navigate("/login")
-    }
-    // console.log({
-    //     "username":username,
-    //     "password":password
-    // })
-}
-const handleLogin = async(response)=>{
-  const AccessToken = response.credential
-  try{
-    const getResponse = await fetch(`${VITE_REQUEST_URL}author/api/auth/google/`,{method:'POST',headers:{
+  const navigate = useNavigate()
+  const [username,setUsername] = useState("")
+  const [password,setPassword] = useState("")
+  const [responseLogin,setResponseLogin] = useState()
+  const [loading,setLoading] = useState(false)
+  const CLIENT_ID=import.meta.env.VITE_CLIENT_ID
+  const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
+  const handleSubmit= async(e)=>{
+  e.preventDefault()
+  setLoading(true)
+  const request_login = await fetch(`${VITE_REQUEST_URL}author/login/`,{method:'POST',headers:{
       'Content-Type':'application/json'
   },body:JSON.stringify({
-    "access_token":AccessToken
-    })
+      "username":username,
+      "password":password,
+      })
   })
-  const responseData = await getResponse.json()
-  if(responseData.Token && responseData.author_id && responseData.user_id){
-    localStorage.setItem("Token",`${responseData.Token}`)
-    localStorage.setItem("author_id",`${responseData.author_id}`)
-    localStorage.setItem("user_id",`${responseData.user_id}`)
-    const notify=()=>{
-      toast("Login Success!")
-    }
-    notify()
-    navigate("/")
+  const response_login = await request_login.json()
+  setResponseLogin(response_login)
+  if(response_login){
+    setLoading(false)
+  }
+  if(response_login && response_login.Token && response_login.author_id &&  response_login.user_id )
+  {
+      localStorage.setItem("Token",`${response_login.Token}`)
+      localStorage.setItem("author_id",`${response_login.author_id}`)
+      localStorage.setItem("user_id",`${response_login.user_id}`)
+      const notify = ()=>{
+          toast("Login Success!")
+      }
+      notify()
+      navigate("/")
   }else{
     const notify=()=>{
       toast("Somthing went wrong.Please try again!")
@@ -74,10 +43,42 @@ const handleLogin = async(response)=>{
     notify()
     navigate("/login")
   }
-  }catch(e){
-    console.log(e)
+  // console.log({
+  //     "username":username,
+  //     "password":password
+  // })
   }
-}
+  const handleLogin = async(response)=>{
+    const AccessToken = response.credential
+    try{
+      const getResponse = await fetch(`${VITE_REQUEST_URL}author/api/auth/google/`,{method:'POST',headers:{
+        'Content-Type':'application/json'
+    },body:JSON.stringify({
+      "access_token":AccessToken
+      })
+    })
+    const responseData = await getResponse.json()
+    console.log(responseData)
+    if(responseData.Token && responseData.author_id && responseData.user_id){
+      localStorage.setItem("Token",`${responseData.Token}`)
+      localStorage.setItem("author_id",`${responseData.author_id}`)
+      localStorage.setItem("user_id",`${responseData.user_id}`)
+      const notify=()=>{
+        toast("Login Success!")
+      }
+      notify()
+      navigate("/")
+    }else{
+      const notify=()=>{
+        toast("Somthing went wrong.Please try again!")
+      }
+      notify()
+      navigate("/login")
+    }
+    }catch(e){
+      console.log(e)
+    }
+  }
 return (
 <>
 <div className="bg-gray-700 text-white flex min-h-screen flex-col items-center pt-16 sm:justify-center sm:pt-0">
