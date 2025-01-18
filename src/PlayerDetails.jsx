@@ -109,7 +109,7 @@ const PlayerDetails = ()=>{
                             }} className="w-24 flex items-center justify-center md:w-60 md:h-60 m-auto h-24">
                                 <div className="text-center font-bold md:text-4xl">
                                 <h1 >Strike Rate</h1>
-                                <p>{playersData?.batting.length>0?(playersData.batting[0].strike_rate):("0")}</p>
+                                <p>{playersData?.batting.length>0?(playersData.batting[0].strike_rate?.toFixed(2)):("0")}</p>
                                 </div>
                             </div>
                             <div style={{
