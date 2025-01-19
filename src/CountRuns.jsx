@@ -58,6 +58,7 @@ const CountRuns = ()=>{
         setLegByesChecked(false)
         setWicketChecked(false)
         setPanalty(false)
+        setRun(-1)
     };
     socketInstance.onerror = function(error){
         console.log('websocket eror',error)
