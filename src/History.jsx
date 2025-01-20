@@ -20,12 +20,14 @@ const History = ()=>{
                 "Content-Type":"application/json"
             }})
             const response = await get_matches.json()
-            if(response){
+            if(get_matches.ok){
                 setMatches(response)
-                setLoading(false)
             }
+            setLoading(false)
           }catch(e){
             console.log(e)
+            const notify = ()=> toast.error("Somthing went wrong!")
+            notify()
           }
         }
         Matches()

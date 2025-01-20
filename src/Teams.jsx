@@ -2,26 +2,38 @@ import { Link, useParams } from "react-router-dom";
 import { MdEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { useEffect, useState } from "react";
-
+import toast, { Toaster } from 'react-hot-toast';
 const Teams = ()=>{
     const {author_id} = useParams();
     const Token = localStorage.getItem("Token")
     const [teams,setTeams] = useState()
     const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
+    const [loading,setLoading] = useState(false)
     // console.log(author_id)
     useEffect(()=>{
         const Teams = async()=>{
+           try{
+            setLoading(true)
             const get_teams = await fetch(`${VITE_REQUEST_URL}teams/list/${author_id}/`,{method:'GET',headers:{
                 Authorization:`Token ${Token}`,
                 "Content-Type":"application/json"
             }})
             const response = await get_teams.json()
-            setTeams(response)
+            if(get_teams.ok){
+                setTeams(response)
+            }
+            setLoading(false)
+           }catch(e){
+            console.log(e)
+            const notify = ()=> toast.error("Somthing went wrong!")
+            notify()
+           }
         }
         Teams()
     },[author_id,Token])
     return (
-        <div className="">
+        <div className="w-screen h-screen">
+            <Toaster/>
             {teams?.length>0?(
                 teams.map((item,index)=>{
                     return <Link to={`players/${item.id}`} key={index} style={{boxShadow: 'rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px'}} className="flex items-center h-16 gap-4 m-auto mb-4 rounded-md w-full md:w-4/5 p-4">
@@ -61,7 +73,12 @@ const Teams = ()=>{
                     </div>
                 </Link>
                 })
-            ):("")}
+            ):(<div className="flex justify-center h-full items-center md:w-3/4 m-auto">
+                {loading?(
+                   <div className="rounded-md h-12 w-12 border-4 border-t-4 border-green-600 animate-spin absolute"></div>
+                ):( <p className="text-gray-800 font-semibold">No teams available at this moment!</p>)}
+                
+            </div>)}
         </div>
     )
 }

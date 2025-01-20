@@ -4,26 +4,39 @@ import { HiMiniBars4 } from "react-icons/hi2";
 import { MdEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { useEffect, useState } from "react";
+import toast, { Toaster } from 'react-hot-toast';
 const Players = ()=>{
     const [players,setPlayers] = useState()
     const {team_id} = useParams()
     const Token = localStorage.getItem("Token")
     const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
+    const [loading,setLoading] = useState(false)
     // console.log(author_id)
     useEffect(()=>{
         const GetPlayers = async()=>{
-            const get_players_list = await fetch(`${VITE_REQUEST_URL}player/list/${team_id}/`,{method:'GET',headers:{
-                Authorization:`Token ${Token}`,
-                "Content-Type":"application/json"
-            }})
-            const response = await get_players_list.json()
-            setPlayers(response)
+            try{
+                setLoading(true)
+                const get_players_list = await fetch(`${VITE_REQUEST_URL}player/list/${team_id}/`,{method:'GET',headers:{
+                    Authorization:`Token ${Token}`,
+                    "Content-Type":"application/json"
+                }})
+                const response = await get_players_list.json()
+                if (get_players_list.ok){
+                    setPlayers(response)
+                }
+                setLoading(false)
+            }catch(e){
+                console.log(e)
+                const notify = ()=> toast.error("Somthing went wrong!")
+                notify()
+            }
         }
         GetPlayers()
     },[team_id,Token])
     // console.log(players)
     return (
-    <div className="">
+    <div className="w-screen h-screen">
+        <Toaster/>
         {
             players?.length>0?(
                 players.map((player,index)=>{
@@ -45,7 +58,11 @@ const Players = ()=>{
                     </div>
                     </Link>
                 })
-            ):("")
+            ):(<div className="flex justify-center h-full items-center md:w-3/4 m-auto">
+                {loading?(
+                   <div className="rounded-md h-12 w-12 border-4 border-t-4 border-green-600 animate-spin absolute"></div>
+                ):( <p className="text-gray-800 font-semibold">No players available at this moment!</p>)}
+            </div>)
         }
     </div>
     )

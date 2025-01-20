@@ -6,15 +6,24 @@ const PlayerDetails = ()=>{
         const {id} = useParams()
         const Token = localStorage.getItem("Token")
         const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
+        const [loading,setLoading] = useState(false)
         // console.log(author_id)
         useEffect(()=>{
             const GetPlayersData = async()=>{
-                const get_data = await fetch(`${VITE_REQUEST_URL}player/player_details/${id}/`,{method:'GET',headers:{
-                    Authorization:`Token ${Token}`,
-                    "Content-Type":"application/json"
-                }})
-                const response = await get_data.json()
-                setPlayersData(response)
+                try{    
+                    setLoading(true) 
+                    const get_data = await fetch(`${VITE_REQUEST_URL}player/player_details/${id}/`,{method:'GET',headers:{
+                        Authorization:`Token ${Token}`,
+                        "Content-Type":"application/json"
+                    }})
+                    const response = await get_data.json()
+                    if (get_data.ok){
+                        setPlayersData(response)
+                    }
+                    setLoading(false)
+                }catch(e){
+                    console.log(e)
+                }
             }
             GetPlayersData()
         },[id,Token])
@@ -32,7 +41,7 @@ const PlayerDetails = ()=>{
         })
     }
     return (
-        <div>
+        <div className="">
             <div className="h-screen">
                 <div className="h-1/3 relative -z-50 flex items-center justify-center bg-green-800">
                     <span style={{fontSize:'100px'}} className="text-gray-400"><IoPersonSharp /></span>
@@ -341,6 +350,13 @@ const PlayerDetails = ()=>{
                     </div>
                 </div>
             </div>
+            {loading?(
+                <div className="flex fixed top-0 h-screen w-screen items-center justify-center h-screen">
+                  <div class="h-16 w-16 animate-spin rounded-full border-t-4 border-b-4 border-yellow-500"></div>
+                    <div class="absolute h-16 w-16 rounded-full border-t-4 border-b-4 animate-bounce border-blue-500">
+                    </div>
+                </div>
+            ):("")}
         </div>
     )
 }
