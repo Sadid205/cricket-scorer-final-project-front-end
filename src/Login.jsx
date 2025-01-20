@@ -58,7 +58,7 @@ const Login = ()=>{
       })
     })
     const responseData = await getResponse.json()
-    console.log(responseData)
+    // console.log(responseData)
     if(responseData.Token && responseData.author_id && responseData.user_id){
       localStorage.setItem("Token",`${responseData.Token}`)
       localStorage.setItem("author_id",`${responseData.author_id}`)

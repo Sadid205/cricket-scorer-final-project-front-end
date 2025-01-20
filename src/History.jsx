@@ -1,31 +1,57 @@
 import { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import toast, { Toaster } from 'react-hot-toast';
 const History = ()=>{
     const navigate = useNavigate()
     const {author_id} = useParams()
     const Token = localStorage.getItem("Token")
     const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     const [matches,setMatches] = useState()
+    const [loading,setLoading] = useState(false)
+    const [isDeleted,setIsDeleted] = useState(false)
+    const [loadingMatches,setLoadingMatches] = useState({});
     useEffect(()=>{
         const Matches = async()=>{
+          try{
+            setLoading(true)
             const get_matches = await fetch(`${VITE_REQUEST_URL}match/list/${author_id}/`,{method:'GET',headers:{
                 Authorization:`Token ${Token}`,
                 "Content-Type":"application/json"
             }})
             const response = await get_matches.json()
-            setMatches(response)
+            if(response){
+                setMatches(response)
+                setLoading(false)
+            }
+          }catch(e){
+            console.log(e)
+          }
         }
         Matches()
-    },[author_id,Token])
+    },[author_id,Token,isDeleted])
     const ResumeMatch = (e,match_id)=>{
         e.preventDefault()
         localStorage.removeItem("match_id")
         localStorage.setItem("match_id",match_id)
         navigate("/count_runs")
     }
+    const DeleteMatch = async(e,match_id)=>{
+        e.preventDefault()
+        setLoadingMatches((prevState)=>({...prevState,[match_id]:true}))
+        const delete_match = await fetch(`${VITE_REQUEST_URL}match/${match_id}/`,{method:'DELETE',headers:{
+            Authorization:`Token ${Token}`,
+            "Content-Type":"application/json"
+        }})
+        if (delete_match.status===204){
+            const notify = ()=> toast.success("Successfully deleted match!")
+            notify()
+            setIsDeleted((prevState)=>!prevState)
+        }
+    }
     return (
-        <div className="">
+        <div className="w-screen h-screen">
+            <Toaster/>
            {matches?.length>0?( <div className="flex flex-wrap gap-4 md:w-3/4 m-auto">
                 {matches.map((match,index)=>{
                     return <div key={index} style={{boxShadow:'rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px'}} className="w-96 h-44 p-2 mb-3 m-auto rounded-md">
@@ -110,12 +136,18 @@ const History = ()=>{
                     <div className="flex justify-evenly items-center">
                         <button onClick={(e)=>ResumeMatch(e,match.id)} className="font-semibold">Resume</button>
                         <Link to={`scoreboard/${match.id}`} className="font-semibold">Socreboard</Link>
-                        <button className="text-xl text-gray-600"><MdDelete/></button>
+                        <button disabled={loadingMatches[match.id]==true} onClick={(e)=>DeleteMatch(e,match.id)} className="text-xl text-gray-600"><MdDelete/></button>
+                        {
+                            loadingMatches[match.id]===true?<div class="border-gray-300 h-4 w-4 animate-spin rounded-full border-4 border-t-green-600" />:null
+                        }
                     </div>
                 </div>
                 })}
-            </div>):(<div className="flex justify-center items-center md:w-3/4 m-auto">
-                <p className="text-gray-600">No matches available at this moment!</p>
+            </div>):(<div className="flex justify-center h-full items-center md:w-3/4 m-auto">
+                {loading?(
+                   <div className="rounded-md h-12 w-12 border-4 border-t-4 border-green-600 animate-spin absolute"></div>
+                ):( <p className="text-gray-800 font-semibold">No matches available at this moment!</p>)}
+                
             </div>)}
         </div>
     )
