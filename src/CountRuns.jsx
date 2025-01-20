@@ -64,7 +64,7 @@ const CountRuns = ()=>{
         console.log('websocket eror',error)
     }
     socketInstance.onclose = function(event){
-        console.log('websocket connection closed!')
+        console.log('websocket connection closed!',event)
     }
     setSocket(socketInstance)
     return ()=>{
@@ -95,7 +95,7 @@ const CountRuns = ()=>{
       socket.send(JSON.stringify(data))
     }
    }
-   console.log(score)
+  //  console.log(score)
    useEffect(()=>{
     sendData()
    },[increase])
