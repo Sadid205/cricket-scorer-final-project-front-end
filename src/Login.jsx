@@ -14,70 +14,89 @@ const Login = ()=>{
   const handleSubmit= async(e)=>{
   e.preventDefault()
   setLoading(true)
-  const request_login = await fetch(`${VITE_REQUEST_URL}author/login/`,{method:'POST',headers:{
-      'Content-Type':'application/json'
-  },body:JSON.stringify({
-      "username":username,
-      "password":password,
-      })
-  })
-  const response_login = await request_login.json()
-  setResponseLogin(response_login)
-  if(response_login){
-    setLoading(false)
-  }
-  if(response_login && response_login.Token && response_login.author_id &&  response_login.user_id )
-  {
-      localStorage.setItem("Token",`${response_login.Token}`)
-      localStorage.setItem("author_id",`${response_login.author_id}`)
-      localStorage.setItem("user_id",`${response_login.user_id}`)
-      const notify = ()=>{
-          toast("Login Success!")
-      }
-      notify()
-      navigate("/")
+  const activate = await fetch(`${VITE_REQUEST_URL}`,{method:'GET'})
+    
+  if (activate.status==404){
+     try{
+        const request_login = await fetch(`${VITE_REQUEST_URL}author/login/`,{method:'POST',headers:{
+          'Content-Type':'application/json'
+        },body:JSON.stringify({
+            "username":username,
+            "password":password,
+            })
+        })
+        const response_login = await request_login.json()
+        setResponseLogin(response_login)
+        if(response_login){
+          setLoading(false)
+        }
+        if(response_login && response_login.Token && response_login.author_id &&  response_login.user_id )
+        {
+            localStorage.setItem("Token",`${response_login.Token}`)
+            localStorage.setItem("author_id",`${response_login.author_id}`)
+            localStorage.setItem("user_id",`${response_login.user_id}`)
+            const notify = ()=>{
+                toast("Login Success!")
+            }
+            notify()
+            navigate("/")
+        }else{
+          const notify=()=>{
+            toast("Something went wrong.Please try again!")
+          }
+          notify()
+          navigate("/login")
+        }
+     }catch(e){
+      console.log(e)
+      toast.error("Something went wrong!")
+     }
   }else{
-    const notify=()=>{
-      toast("Somthing went wrong.Please try again!")
-    }
-    notify()
-    navigate("/login")
+    toast.error("Something went wrong!")
   }
+ 
   // console.log({
   //     "username":username,
   //     "password":password
   // })
   }
   const handleLogin = async(response)=>{
-    const AccessToken = response.credential
-    try{
-      const getResponse = await fetch(`${VITE_REQUEST_URL}author/api/auth/google/`,{method:'POST',headers:{
-        'Content-Type':'application/json'
-    },body:JSON.stringify({
-      "access_token":AccessToken
-      })
-    })
-    const responseData = await getResponse.json()
-    // console.log(responseData)
-    if(responseData.Token && responseData.author_id && responseData.user_id){
-      localStorage.setItem("Token",`${responseData.Token}`)
-      localStorage.setItem("author_id",`${responseData.author_id}`)
-      localStorage.setItem("user_id",`${responseData.user_id}`)
-      const notify=()=>{
-        toast("Login Success!")
+    const activate = await fetch(`${VITE_REQUEST_URL}`,{method:'GET'})
+    if (activate.status==404){
+      const AccessToken = response.credential
+      try{
+          const getResponse = await fetch(`${VITE_REQUEST_URL}author/api/auth/google/`,{method:'POST',headers:{
+            'Content-Type':'application/json'
+          },body:JSON.stringify({
+            "access_token":AccessToken
+            })
+          })
+        const responseData = await getResponse.json()
+        // console.log(responseData)
+        if(responseData.Token && responseData.author_id && responseData.user_id){
+          localStorage.setItem("Token",`${responseData.Token}`)
+          localStorage.setItem("author_id",`${responseData.author_id}`)
+          localStorage.setItem("user_id",`${responseData.user_id}`)
+          const notify=()=>{
+            toast("Login Success!")
+          }
+          notify()
+          navigate("/")
+        }else{
+          const notify=()=>{
+            toast("Somthing went wrong.Please try again!")
+          }
+          notify()
+          navigate("/login")
+        }
+      }catch(e){
+        console.log(e)
+        console.log("Somthing went wrong.Please try again!")
       }
-      notify()
-      navigate("/")
     }else{
-      const notify=()=>{
-        toast("Somthing went wrong.Please try again!")
-      }
-      notify()
-      navigate("/login")
+      toast.error("Something went wrong!")
     }
-    }catch(e){
-      console.log(e)
-    }
+   
   }
 return (
 <>
@@ -90,7 +109,7 @@ return (
           <p><span className='font-semibold'>Password:</span> <span>Naim12345</span></p>
         </div>
   <a href="#">
-    <div className="text-foreground font-semibold text-2xl tracking-tighter mx-auto flex items-center gap-2">
+    <div className="text-foreground  font-semibold text-2xl tracking-tighter mx-auto flex items-center gap-2">
         <p>Login Page</p>
     </div>
   </a>

@@ -347,7 +347,9 @@ const CountRuns = ()=>{
           }
           return
         }
-        const request_start_second_innings = await fetch(`${VITE_REQUEST_URL}match/start_second_innings/`,{method:'PUT',headers:{
+        try{
+          setLoading(true)
+          const request_start_second_innings = await fetch(`${VITE_REQUEST_URL}match/start_second_innings/`,{method:'PUT',headers:{
             Authorization:`Token ${Token}`,
             "Content-Type":"application/json"
         },body:JSON.stringify({
@@ -357,12 +359,16 @@ const CountRuns = ()=>{
             "bowler":secondInningsBowler
             })
         })
-        const response_start_second_innings = await request_start_second_innings.json()
-        if (response_start_second_innings){
+        // const response_start_second_innings = await request_start_second_innings.json()
+        if (request_start_second_innings.ok){
           localStorage.removeItem("over_finished")
           // window.location.reload()
           setIncrease((prevState)=>prevState+1)
           setShowSecondInningsModal(false)
+        }
+        }catch(e){
+          console.log(e)
+          toast.error("Something went wront!")
         }
     }
     // console.log(score)
@@ -705,11 +711,12 @@ const CountRuns = ()=>{
                     </div>
                 {/*footer*/}
                 <div className="flex items-center justify-center p-6 border-t border-solid border-blueGray-200 rounded-b">
-                  <Link
+                  <button
                     className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-28 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                  onClick={(e)=>startSecondInnings(e)}>
-                    Done
-                  </Link>
+                  onClick={(e)=>startSecondInnings(e)}
+                  disabled={loading}>
+                     {loading==true?(<div class="border-gray-300 h-6 w-6 animate-spin rounded-full border-4 border-t-green-600" />):("Done")}
+                  </button>
                 </div>
               </div>
             </div>

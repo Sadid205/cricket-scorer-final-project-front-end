@@ -133,7 +133,7 @@ const NewMatch = ()=>{
                 </div>
                 <div>
                     <Link onClick={(e)=>onSubmit(e)} className="bg-green-700 py-2 flex items-center w-28 justify-center font-bold rounded-md text-white">{loading?(
-                        <div class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full dark:text-blue-500" role="status" aria-label="loading">
+                        <div className="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full dark:text-blue-500" role="status" aria-label="loading">
                         </div>):("Start Match")}
                         </Link>
                 </div>

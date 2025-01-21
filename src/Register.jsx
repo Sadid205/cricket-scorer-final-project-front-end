@@ -16,21 +16,31 @@ const Register = ()=>{
     const handleSubmit = async(e)=>{
         e.preventDefault()
         setLoading(true)
-        const signup_request = await fetch(`${VITE_REQUEST_URL}author/register/`,{method:'POST',headers:{
-            'Content-Type':'application/json'
-        },body:JSON.stringify({
-            "username":username,
-            "first_name":firstName,
-            "last_name":lastName,
-            "email":email,
-            "password":password,
-            "confirm_password":confirmPassword,
+        const activate = await fetch(`${VITE_REQUEST_URL}`,{method:'GET'})
+        if (activate.status==404){
+           try{
+            const signup_request = await fetch(`${VITE_REQUEST_URL}author/register/`,{method:'POST',headers:{
+                'Content-Type':'application/json'
+            },body:JSON.stringify({
+                "username":username,
+                "first_name":firstName,
+                "last_name":lastName,
+                "email":email,
+                "password":password,
+                "confirm_password":confirmPassword,
+                })
             })
-        })
-        const signup_response = await signup_request.json()
-        if (signup_response){
-            setLoading(false)
-            setSignUpResponse(signup_response)
+            const signup_response = await signup_request.json()
+            if (signup_response){
+                setLoading(false)
+                setSignUpResponse(signup_response)
+            }
+           }catch(e){
+            console.log(e)
+            toast.error("Somthing went wrong!")
+           }
+        }else{
+            toast.error("Something went wrong.Plaase try again!")
         }
         // console.log({
         //     "username":username,
@@ -41,7 +51,7 @@ const Register = ()=>{
         //     "ConfirmPassword":confirmPassword,
         // })
     }
-    console.log(signUpResponse)
+    // console.log(signUpResponse)
     if(signUpResponse && signUpResponse.Success){
         const notify = ()=>{
             toast(`${signUpResponse.Success}`)
@@ -49,7 +59,7 @@ const Register = ()=>{
         notify()
         navigate("/login")
     }
-    console.log(signUpResponse?(signUpResponse.username?(signUpResponse.username[0]):("Username")):("Username"))
+    // console.log(signUpResponse?(signUpResponse.username?(signUpResponse.username[0]):("Username")):("Username"))
 return (
 <>
 <form onSubmit={(e)=>handleSubmit(e)} style={{height:"100vh"}} className="flex bg-gray-700 justify-center items-center space-y-8">
