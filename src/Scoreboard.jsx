@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { MdAutoGraph } from "react-icons/md";
 import { IoIosArrowDown,IoIosArrowUp  } from "react-icons/io";
-
+import toast, { Toaster } from 'react-hot-toast';
 const ScoreBoard = ()=>{
     const {match_id} = useParams()
     const Token = localStorage.getItem("Token")
@@ -10,6 +10,7 @@ const ScoreBoard = ()=>{
     const [teamOneExpand,setTeamOneExpand] = useState(false)
     const [teamTwoExpand,setTeamTwoExpand] = useState(false)
     const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
+    const [loading,setLoading] = useState(false)
     const [select,setSelect] = useState({
         ScoreBoard:true,
         Overs:false
@@ -23,21 +24,32 @@ const ScoreBoard = ()=>{
     // console.log(author_id)
     useEffect(()=>{
         const ScorBoard = async()=>{
+           try{
+            setLoading(true)
             const get_score = await fetch(`${VITE_REQUEST_URL}match/scoreboard/${match_id}/`,{method:'GET',headers:{
                 Authorization:`Token ${Token}`,
                 "Content-Type":"application/json"
             }})
             const response = await get_score.json()
-            setScoreBoard(response)
+            if (get_score.ok){
+                setScoreBoard(response)
+            }
+            setLoading(false)
+           }catch(e){
+            console.log(e)
+            const notify = ()=> toast.error("Somthing went wrong!")
+            notify()
+           }
         }
         ScorBoard()
     },[match_id,Token])
-    console.log(scoreBoard)
+    // console.log(scoreBoard)
     return (
         <div className="h-screen w-screen">
+            <Toaster/>
             <div className="h-1/4 relative bg-green-600">
                 <div className="flex text-md h-full w-full justify-center text-white font-semibold md:text-4xl gap-4 items-center">
-                    <h1>{scoreBoard&&scoreBoard.match.team1.team_name.slice(0,17)} vs {scoreBoard&&scoreBoard.match.team2.team_name.slice(0,17)}</h1>
+                    <h1>{scoreBoard&&scoreBoard.match.team1?.team_name?.slice(0,17)} vs {scoreBoard&&scoreBoard.match.team2?.team_name?.slice(0,17)}</h1>
                     <Link><MdAutoGraph /></Link>
                 </div>
                 <div className="p-3 absolute  text-white bottom-0 font-semibold">
@@ -65,18 +77,18 @@ const ScoreBoard = ()=>{
                         <div>
                             <div onClick={()=>setTeamOneExpand((prev)=>!prev)} className="w-full h-12 flex items-center hover:cursor-pointer bg-green-600">
                                 <div className="flex text-white text-md md:text-xl w-11/12 m-auto justify-between items-center gap-2">
-                                    <p>{scoreBoard&&scoreBoard.match.team1.team_name.slice(0,17)}</p>
+                                    <p>{scoreBoard&&scoreBoard.match.team1?.team_name?.slice(0,17)}</p>
                                     <div className="flex items-center gap-2">
                                         {/* {console.log(scoreBoard?.match)} */}
                                     <p className="font-semibold">
                                         {
                                             scoreBoard?(
-                                                (scoreBoard.match.toss_winner==scoreBoard.match.team1.id&&scoreBoard.match.elected=="Bat")||(scoreBoard.match.toss_winner==scoreBoard.match.team2.id&&scoreBoard.match.elected=="Bowl")?(scoreBoard.match.first_innings_run+ "-" +scoreBoard.match.first_innings_wicket):(scoreBoard.match.second_innings_run+ "-" +scoreBoard.match.second_innings_wicket)
+                                                (scoreBoard.match.toss_winner==scoreBoard.match.team1?.id&&scoreBoard.match.elected=="Bat")||(scoreBoard.match.toss_winner==scoreBoard.match.team2.id&&scoreBoard.match.elected=="Bowl")?(scoreBoard.match.first_innings_run+ "-" +scoreBoard.match.first_innings_wicket):(scoreBoard.match.second_innings_run+ "-" +scoreBoard.match.second_innings_wicket)
                                             ):("")
                                         } <span className="text-xs">(
                                             {
                                             scoreBoard?(
-                                                (scoreBoard.match.toss_winner==scoreBoard.match.team1.id&&scoreBoard.match.elected=="Bat")||(scoreBoard.match.toss_winner==scoreBoard.match.team2.id&&scoreBoard.match.elected=="Bowl")?(scoreBoard.match.first_innings_nth_over + "." + scoreBoard.match.first_innings_nth_ball):(scoreBoard.match.second_innings_nth_over + "." + scoreBoard.match.second_innings_nth_ball)
+                                                (scoreBoard.match.toss_winner==scoreBoard.match.team1?.id&&scoreBoard.match.elected=="Bat")||(scoreBoard.match.toss_winner==scoreBoard.match.team2.id&&scoreBoard.match.elected=="Bowl")?(scoreBoard.match.first_innings_nth_over + "." + scoreBoard.match.first_innings_nth_ball):(scoreBoard.match.second_innings_nth_over + "." + scoreBoard.match.second_innings_nth_ball)
                                             ):("")
                                         }
                                         )</span>
@@ -177,17 +189,17 @@ const ScoreBoard = ()=>{
                         <div>
                             <div onClick={()=>setTeamTwoExpand((prev)=>!prev)} className="w-full border-t-[1px] hover:cursor-pointer border-gray-300 h-12 flex items-center bg-green-600">
                                 <div className="flex text-white text-md md:text-xl w-11/12 m-auto justify-between items-center gap-2">
-                                    <p>{scoreBoard&&scoreBoard.match.team2.team_name.slice(0,17)}</p>
+                                    <p>{scoreBoard&&scoreBoard.match.team2?.team_name?.slice(0,17)}</p>
                                     <div className="flex items-center gap-2">
                                     <p className="font-semibold">
                                         {
                                             scoreBoard?(
-                                                (scoreBoard.match.toss_winner==scoreBoard.match.team2.id&&scoreBoard.match.elected=="Bat")||(scoreBoard.match.toss_winner==scoreBoard.match.team1.id&&scoreBoard.match.elected=="Bowl")?(scoreBoard.match.first_innings_run+ "-" +scoreBoard.match.first_innings_wicket):(scoreBoard.match.second_innings_run+ "-" +scoreBoard.match.second_innings_wicket)
+                                                (scoreBoard.match.toss_winner==scoreBoard.match.team2?.id&&scoreBoard.match.elected=="Bat")||(scoreBoard.match.toss_winner==scoreBoard.match.team1?.id&&scoreBoard.match.elected=="Bowl")?(scoreBoard.match.first_innings_run+ "-" +scoreBoard.match.first_innings_wicket):(scoreBoard.match.second_innings_run+ "-" +scoreBoard.match.second_innings_wicket)
                                             ):("")
                                         } <span className="text-xs">(
                                             {
                                             scoreBoard?(
-                                                (scoreBoard.match.toss_winner==scoreBoard.match.team2.id&&scoreBoard.match.elected=="Bat")||(scoreBoard.match.toss_winner==scoreBoard.match.team1.id&&scoreBoard.match.elected=="Bowl")?(scoreBoard.match.first_innings_nth_over + "." + scoreBoard.match.first_innings_nth_ball):(scoreBoard.match.second_innings_nth_over + "." + scoreBoard.match.second_innings_nth_ball)
+                                                (scoreBoard.match.toss_winner==scoreBoard.match.team2?.id&&scoreBoard.match.elected=="Bat")||(scoreBoard.match.toss_winner==scoreBoard.match.team1?.id&&scoreBoard.match.elected=="Bowl")?(scoreBoard.match.first_innings_nth_over + "." + scoreBoard.match.first_innings_nth_ball):(scoreBoard.match.second_innings_nth_over + "." + scoreBoard.match.second_innings_nth_ball)
                                             ):("")
                                         }
                                         )</span>
@@ -351,6 +363,13 @@ const ScoreBoard = ()=>{
                     </div>
                 </div>
             </div>
+            {loading?(
+                <div className="flex fixed top-0 h-screen w-screen items-center justify-center h-screen">
+                  <div class="h-16 w-16 animate-spin rounded-full border-t-4 border-b-4 border-yellow-500"></div>
+                    <div class="absolute h-16 w-16 rounded-full border-t-4 border-b-4 animate-bounce border-green-600">
+                    </div>
+                </div>
+            ):("")}
         </div>
     )
 }

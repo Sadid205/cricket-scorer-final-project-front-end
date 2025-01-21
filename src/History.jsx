@@ -51,12 +51,13 @@ const History = ()=>{
             setIsDeleted((prevState)=>!prevState)
         }
     }
+    // style={{boxShadow:'rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px'}}
     return (
         <div className="w-screen h-screen">
             <Toaster/>
-           {matches?.length>0?( <div className="flex flex-wrap gap-4 md:w-3/4 m-auto">
+           {matches?.length>0?( <div className="flex relative top-14 flex-wrap gap-4 md:w-3/4 m-auto">
                 {matches.map((match,index)=>{
-                    return <div key={index} style={{boxShadow:'rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px'}} className="w-96 h-44 p-2 mb-3 m-auto rounded-md">
+                    return <div key={index}  className="w-96 border border-gray-700 h-44 p-2 mb-3 m-auto rounded-md">
                     <p>{(()=>{
                         const dateStr = match.date
                         const date = new Date(dateStr)
@@ -77,28 +78,30 @@ const History = ()=>{
                                     <p className="text-white font-semibold">
                                     {
                                         (()=>{
-                                            const words = match.team1.team_name.split(" ")
-                                            if (words.length===1){
-                                                return words[0].slice(0,2).toUpperCase();
-                                            }else if(words.length===2){
-                                                return words[0].carAt(0).toUpperCase() + words[1].carAt(0).toUpperCase();
-                                            }else{
-                                                return words[0].slice(0,2).toUpperCase();
+                                            const words = match.team1?.team_name?.split(" ")
+                                            if (words!=null){
+                                                if (words?.length===1){
+                                                    return words[0].slice(0,2).toUpperCase();
+                                                }else if(words?.length===2){
+                                                    return words[0]?.carAt(0).toUpperCase() + words[1]?.carAt(0).toUpperCase();
+                                                }else{
+                                                    return words[0]?.slice(0,2).toUpperCase();
+                                                }
                                             }
                                         })()
                                     }
                                     </p>
                                 </div>
                                 <div>
-                                    <p className="font-semibold">{match.team1.team_name}</p>
+                                    <p className="font-semibold">{match.team1?.team_name?match.team1.team_name:""}</p>
                                 </div>
                             </div>
                         </div>
                         <div>
                             <p className="font-semibold">{
-                                (match.toss_winner==match.team1.id&&match.elected=="Bat")||(match.toss_winner==match.team2.id&&match.elected=="Bowl")?(match.first_innings_run+ "/" +match.first_innings_wicket):(match.second_innings_run+ "/" +match.second_innings_wicket)
+                                (match.toss_winner==match.team1?.id&&match.elected=="Bat")||(match.toss_winner==match.team2.id&&match.elected=="Bowl")?(match.first_innings_run+ "/" +match.first_innings_wicket):(match.second_innings_run+ "/" +match.second_innings_wicket)
                             } <span className="text-xs text-gray-600">{
-                                match.toss_winner==match.team1.id&&match.elected=="Bat"||(match.toss_winner==match.team2.id&&match.elected=="Bowl")?(match.first_innings_nth_over + "." + match.first_innings_nth_ball):(match.second_innings_nth_over + "." + match.second_innings_nth_ball)
+                                match.toss_winner==match.team1?.id&&match.elected=="Bat"||(match.toss_winner==match.team2.id&&match.elected=="Bowl")?(match.first_innings_nth_over + "." + match.first_innings_nth_ball):(match.second_innings_nth_over + "." + match.second_innings_nth_ball)
                             }</span></p>
                         </div>
                     </div>
@@ -109,28 +112,30 @@ const History = ()=>{
                                     <p className="text-white font-semibold">
                                     {
                                         (()=>{
-                                            const words = match.team2.team_name.split(" ")
+                                            const words = match.team2?.team_name?.split(" ")
+                                           if (words!=null){
                                             if (words.length===1){
-                                                return words[0].slice(0,2).toUpperCase();
+                                                return words[0]?.slice(0,2).toUpperCase();
                                             }else if(words.length===2){
-                                                return words[0].carAt(0).toUpperCase() + words[1].carAt(0).toUpperCase();
+                                                return words[0]?.carAt(0).toUpperCase() + words[1]?.carAt(0).toUpperCase();
                                             }else{
-                                                return words[0].slice(0,2).toUpperCase();
+                                                return words[0]?.slice(0,2).toUpperCase();
                                             }
+                                           }
                                         })()
                                     }
                                     </p>
                                 </div>
                                 <div>
-                                    <p className="font-semibold">{match.team2.team_name}</p>
+                                    <p className="font-semibold">{match.team2?.team_name?match.team2.team_name:""}</p>
                                 </div>
                             </div>
                         </div>
                         <div>
                         <p className="font-semibold">{
-                                (match.toss_winner==match.team2.id&&match.elected=="Bat")||(match.toss_winner==match.team1.id&&match.elected=="Bowl")?(match.first_innings_run+ "/" +match.first_innings_wicket):(match.second_innings_run+ "/" +match.second_innings_wicket)
+                                (match.toss_winner==match.team2?.id&&match.elected=="Bat")||(match.toss_winner==match.team1.id&&match.elected=="Bowl")?(match.first_innings_run+ "/" +match.first_innings_wicket):(match.second_innings_run+ "/" +match.second_innings_wicket)
                             } <span className="text-xs text-gray-600">{
-                                match.toss_winner==match.team2.id&&match.elected=="Bat"||(match.toss_winner==match.team1.id&&match.elected=="Bowl")?(match.first_innings_nth_over + "." + match.first_innings_nth_ball):(match.second_innings_nth_over + "." + match.second_innings_nth_ball)
+                                match.toss_winner==match.team2?.id&&match.elected=="Bat"||(match.toss_winner==match.team1.id&&match.elected=="Bowl")?(match.first_innings_nth_over + "." + match.first_innings_nth_ball):(match.second_innings_nth_over + "." + match.second_innings_nth_ball)
                             }</span></p>
                         </div>
                     </div>

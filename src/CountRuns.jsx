@@ -36,7 +36,7 @@ const CountRuns = ()=>{
     const [secondInningsNonStriker,setSecondInningsNonStriker] = useState("")
     const [secondInningsBowler,setSecondInningsBowler] = useState("")
     const [showMatchFinishedModal,setShowMatchFinishedModal] = useState(false)
-    const [loading,setLoading] = useState(false)
+    const [loading,setLoading] = useState(true)
     const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     const VITE_WS_REQUEST_URL=import.meta.env.VITE_WS_REQUEST_URL
     const [socket,setSocket] = useState(null)
@@ -44,13 +44,15 @@ const CountRuns = ()=>{
    useEffect(()=>{
     const socketInstance = new WebSocket(`${VITE_WS_REQUEST_URL}ws/test/${match_id}/`);
     socketInstance.onopen = function(event){
-      const match_data = JSON.parse(event.data)
-      setScore(match_data)
+      // const match_data = JSON.parse(event.data)
+      // setScore(match_data)
       // console.log(match_data)
+      toast.success("Successfully connected with server!")
     }
     socketInstance.onmessage = function(event){
         const match_data = JSON.parse(event.data)
         // console.log('received data:',match_data);
+        setLoading(false)
         setScore(match_data)
         setWideChecked(false)
         setNoBallChecked(false)
@@ -64,7 +66,8 @@ const CountRuns = ()=>{
         console.log('websocket eror',error)
     }
     socketInstance.onclose = function(event){
-        console.log('websocket connection closed!',event)
+        // console.log('websocket connection closed!',event)
+        toast.error("Connection cloased!")
     }
     setSocket(socketInstance)
     return ()=>{
@@ -91,8 +94,9 @@ const CountRuns = ()=>{
         "panalty_runs":panaltyRuns,
         }
     if(socket && socket.readyState === WebSocket.OPEN){
-      console.log("Data sent",data)
+      // console.log("Data sent",data)
       socket.send(JSON.stringify(data))
+      setLoading(true)
     }
    }
   //  console.log(score)
@@ -175,7 +179,9 @@ const CountRuns = ()=>{
           notify()
           return
         }
-        const addNewBowlerRequest = await fetch(`${VITE_REQUEST_URL}match/add_new_over/`,{method:'PUT',headers:{
+        try{
+          setLoading(true)
+          const addNewBowlerRequest = await fetch(`${VITE_REQUEST_URL}match/add_new_over/`,{method:'PUT',headers:{
             Authorization:`Token ${Token}`,
             "Content-Type":"application/json"
         },body:JSON.stringify({
@@ -185,9 +191,16 @@ const CountRuns = ()=>{
         })
         await addNewBowlerRequest.json()
         localStorage.removeItem("over_finished")
-        window.location.reload()
+        // window.location.reload()
+        setShowModal(false)
+        setIncrease((prevState)=>prevState+1)
+        toast.success("Successfully set a new bowler!")
+        }catch(e){
+          console.log(e)
+        }
     }
     const doneSetRun=(e)=>{
+        setLoading(true)
         e.preventDefault()
         if(howWicketFall===""||newBatsman===""){
           if(howWicketFall===""){
@@ -218,7 +231,8 @@ const CountRuns = ()=>{
             setShowWicketModal(false)
         }
         setIncrease((prevState)=>prevState+1)
-        window.location.reload()
+        setLoading(false)
+        // window.location.reload()
     }
     const updateScore =(e,current_run)=>{
         e.preventDefault()
@@ -346,7 +360,9 @@ const CountRuns = ()=>{
         const response_start_second_innings = await request_start_second_innings.json()
         if (response_start_second_innings){
           localStorage.removeItem("over_finished")
-          window.location.reload()
+          // window.location.reload()
+          setIncrease((prevState)=>prevState+1)
+          setShowSecondInningsModal(false)
         }
     }
     // console.log(score)
@@ -605,8 +621,9 @@ const CountRuns = ()=>{
                   <button
                     className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-28 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     onClick={(e) => addNewBowler(e)}
+                    disabled={loading}
                   >
-                    Done
+                    {loading==true?(<div class="border-gray-300 h-6 w-6 animate-spin rounded-full border-4 border-t-green-600" />):("Done")}
                   </button>
                 </div>
               </div>
@@ -651,8 +668,9 @@ const CountRuns = ()=>{
                 <div className="flex items-center justify-center p-6 border-t border-solid border-blueGray-200 rounded-b">
                   <button
                     className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-28 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                  disabled={loading}
                   onClick={(e)=>{doneSetRun(e)}}>
-                    Done
+                    {loading==true?(<div class="border-gray-300 h-6 w-6 animate-spin rounded-full border-4 border-t-green-600" />):("Done")}
                   </button>
                 </div>
               </div>
@@ -739,7 +757,7 @@ const CountRuns = ()=>{
             <div className="relative w-auto my-6 mx-auto max-w-3xl">
               {/*content*/}
               
-              <div className="border-gray-300 h-20 w-20 animate-spin rounded-full border-8 border-t-blue-600" />
+              <div className="border-gray-300 h-12 w-12 md:h-20 md:w-20 animate-spin rounded-full border-4 md:border-8 border-t-green-600" />
             
             </div>
           </div>
